@@ -1,0 +1,17 @@
+{
+  "name": "kahoot-uz-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Kahoot UZ — jonli o'yin serveri (Socket.IO)",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}

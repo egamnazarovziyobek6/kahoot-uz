@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   Kahoot UZ — dizayn tizimi
+   Ranglar: Samarqand koshinlari, suzana kashtasi va anor motivi
+   ============================================================ */
+@theme {
+  --font-display: 'Baloo 2', 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+
+  /* Asosiy palitra */
+  --color-cream: #fbf3e4;
+  --color-cream-deep: #f3e6cd;
+
+  --color-samarkand: #0e7c9d;
+  --color-samarkand-light: #1ea5b8;
+  --color-samarkand-deep: #124a5e;
+
+  --color-indigo-uz: #2b3a8c;
+  --color-indigo-deep: #1e2a6b;
+
+  --color-saffron: #f5a623;
+  --color-saffron-light: #ffc94d;
+
+  --color-anor: #e24a3b;
+  --color-anor-deep: #b8382c;
+
+  --color-chaman: #1b7a4b;
+  --color-chaman-light: #3aa06a;
+
+  --color-ink: #22304a;
+  --color-ink-soft: #4a5a75;
+
+  /* Javob variantlari ranglari (Kahoot uslubi) */
+  --color-answer-1: #e24a3b;
+  --color-answer-2: #1368ce;
+  --color-answer-3: #f5a623;
+  --color-answer-4: #1b7a4b;
+
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  --shadow-card: 0 10px 30px -10px rgb(34 48 74 / 0.22);
+  --shadow-pop: 0 18px 40px -12px rgb(34 48 74 / 0.35);
+}
+
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-cream);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgb(30 165 184 / 0.14), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgb(245 166 35 / 0.16), transparent 40%),
+      radial-gradient(circle at 78% 82%, rgb(226 74 59 / 0.1), transparent 45%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--color-saffron-light);
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .btn,
+  .btn-primary,
+  .btn-samarkand,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-2xl);
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.1;
+    user-select: none;
+    transition: transform 0.15s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(180deg, var(--color-anor) 0%, var(--color-anor-deep) 100%);
+    box-shadow: 0 6px 0 0 var(--color-anor-deep), var(--shadow-card);
+  }
+  .btn-primary:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 0 var(--color-anor-deep), var(--shadow-card);
+  }
+
+  .btn-samarkand {
+    color: #fff;
+    background: linear-gradient(180deg, var(--color-samarkand-light) 0%, var(--color-samarkand) 100%);
+    box-shadow: 0 6px 0 0 var(--color-samarkand-deep), var(--shadow-card);
+  }
+  .btn-samarkand:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 0 var(--color-samarkand-deep), var(--shadow-card);
+  }
+
+  .btn-ghost {
+    border: 2px solid rgb(34 48 74 / 0.14);
+    background: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(6px);
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    border-color: rgb(34 48 74 / 0.3);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-2xl);
+    border: 1px solid rgb(0 0 0 / 0.05);
+    background: #fff;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .mascot-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: blink 4.6s ease-in-out infinite;
+  }
+
+  /* Forma maydonlari */
+  .field {
+    width: 100%;
+    border-radius: 0.9rem;
+    border: 2px solid rgb(34 48 74 / 0.12);
+    background: #fff;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .field:focus {
+    border-color: var(--color-samarkand);
+  }
+  .field::placeholder {
+    color: rgb(74 90 117 / 0.5);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    border: 2px solid rgb(34 48 74 / 0.12);
+    background: #fff;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+  .chip[data-active='true'] {
+    border-color: var(--color-samarkand);
+    background: color-mix(in srgb, var(--color-samarkand) 12%, #fff);
+    color: var(--color-samarkand-deep);
+  }
+
+  .section {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .section {
+      padding-inline: 2rem;
+    }
+  }
+}

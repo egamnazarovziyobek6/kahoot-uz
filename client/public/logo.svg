@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="16" fill="#0E7C9D" />
+  <!-- Chust do'ppisi -->
+  <path d="M12 44c0-13 9-24 20-24s20 11 20 24z" fill="#12213A" />
+  <path d="M10 44h44v5a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3z" fill="#12213A" />
+  <!-- Qalampir (pepper) motivlari -->
+  <g fill="#FBF3E4">
+    <path d="M32 24c2.4 2 3.4 4.6 2.2 6.6-1.1 1.9-3.6 2-4.8 0-1.2-2 0-4.6 2.6-6.6z" />
+    <path d="M21 31c2.7 1 4.3 3.1 3.8 5.2-.5 2-2.8 2.7-4.4 1.2-1.6-1.5-1.3-4.4.6-6.4z" />
+    <path d="M43 31c-2.7 1-4.3 3.1-3.8 5.2.5 2 2.8 2.7 4.4 1.2 1.6-1.5 1.3-4.4-.6-6.4z" />
+  </g>
+  <!-- Asos naqshi -->
+  <g stroke="#FBF3E4" stroke-width="1.6" fill="none">
+    <path d="M13 48c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0 4 2.6 6 0 4-2.6 6 0 4 2.6 6 0" />
+  </g>
+</svg>

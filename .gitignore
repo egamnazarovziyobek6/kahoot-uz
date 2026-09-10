@@ -1,0 +1,34 @@
+# Bog'liqliklar
+node_modules/
+.pnp
+.pnp.js
+
+# Build natijalari
+dist/
+build/
+*.tsbuildinfo
+
+# Muhit o'zgaruvchilari
+.env
+.env.local
+.env.*.local
+
+# Loglar
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# Muharrir / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Vite / test
+.vite/
+coverage/

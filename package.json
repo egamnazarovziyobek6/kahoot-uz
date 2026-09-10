@@ -1,0 +1,15 @@
+{
+  "name": "kahoot-uz",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Kahoot UZ — o'yin orqali o'rganish platformasi (o'zbekcha)",
+  "scripts": {
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
