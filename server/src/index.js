@@ -7,6 +7,7 @@ import passport from 'passport'
 import { Server } from 'socket.io'
 import { authRouter, socketTeacher } from './auth.js'
 import { aiRouter } from './ai/router.js'
+import { CLIENT_ORIGINS } from './clientOrigins.js'
 import { db } from './db.js'
 import { checkAnswer, computePoints, publicQuestion } from './gameLogic.js'
 import { quizzesRouter } from './quizzes.js'
@@ -20,10 +21,9 @@ import {
 } from './rooms.js'
 
 const PORT = process.env.PORT || 4000
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
 
 const app = express()
-app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }))
+app.use(cors({ origin: CLIENT_ORIGINS, credentials: true }))
 app.use(cookieParser())
 app.use(express.json({ limit: '2mb' }))
 app.use(passport.initialize())
@@ -36,7 +36,7 @@ app.use('/api/ai', aiRouter)
 const getOwnedQuizStmt = db.prepare('SELECT data FROM quizzes WHERE id = ? AND teacher_id = ?')
 
 const httpServer = createServer(app)
-const io = new Server(httpServer, { cors: { origin: CLIENT_ORIGIN, credentials: true } })
+const io = new Server(httpServer, { cors: { origin: CLIENT_ORIGINS, credentials: true } })
 
 // Har bir socket ulanishida xuddi shu auth cookie'dan o'qituvchini aniqlaymiz.
 // O'quvchi uchun bu har doim null — PIN bilan qo'shilish hech qanday auth talab qilmaydi.

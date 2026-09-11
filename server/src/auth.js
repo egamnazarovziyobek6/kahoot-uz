@@ -7,11 +7,12 @@ import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import { PRIMARY_CLIENT_ORIGIN } from './clientOrigins.js'
 import { getTeacherById, publicTeacher, upsertTeacher } from './teachers.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-almashtiring'
 const COOKIE_NAME = 'kahoot_uz_token'
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
+const CLIENT_ORIGIN = PRIMARY_CLIENT_ORIGIN
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.COOKIE_SECURE === 'true',

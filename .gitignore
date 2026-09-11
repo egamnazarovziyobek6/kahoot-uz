@@ -8,10 +8,9 @@ dist/
 build/
 *.tsbuildinfo
 
-# Muhit o'zgaruvchilari
-.env
-.env.local
-.env.*.local
+# Muhit o'zgaruvchilari (maxfiy kalitlar) — .env.example bundan mustasno
+.env*
+!.env.example
 
 # Loglar
 npm-debug.log*
