@@ -10,11 +10,13 @@ import {
   MIN_ANSWERS,
   IMAGE_MAX_BYTES,
 } from '../../lib/quiz.js'
+import { api } from '../../lib/api.js'
 
 export default function QuestionEditor({
   question,
   index,
   total,
+  subject,
   errors = [],
   onPatch,
   onSetType,
@@ -27,9 +29,30 @@ export default function QuestionEditor({
   onAdd,
 }) {
   const [imgError, setImgError] = useState('')
+  const [checking, setChecking] = useState(false)
+  const [checkResult, setCheckResult] = useState(null)
   const q = question
   const isChoice = q.type === 'quiz' || q.type === 'multi'
   const isInput = q.type === 'input'
+
+  async function checkWithGemini() {
+    if (!q.text.trim()) return
+    setChecking(true)
+    setCheckResult(null)
+    try {
+      const result = await api.post('/ai/check-question', {
+        type: q.type,
+        text: q.text,
+        answers: q.answers.map((a) => ({ text: a.text, correct: a.correct })),
+        subject,
+      })
+      setCheckResult(result)
+    } catch (e) {
+      setCheckResult({ ok: false, issues: [e.message] })
+    } finally {
+      setChecking(false)
+    }
+  }
 
   function handleImage(e) {
     const file = e.target.files?.[0]
@@ -194,6 +217,44 @@ export default function QuestionEditor({
           >
             + Variant qo‘shish
           </button>
+        )}
+      </div>
+
+      {/* Gemini bilan tekshirish */}
+      <div className="mt-5">
+        <button
+          type="button"
+          onClick={checkWithGemini}
+          disabled={checking || !q.text.trim()}
+          className="chip !px-3 !py-1.5 disabled:opacity-40"
+        >
+          {checking ? '⏳ Tekshirilmoqda…' : '✨ Gemini bilan tekshirish'}
+        </button>
+
+        {checkResult && (
+          <div
+            className={`mt-2 rounded-xl p-3 text-sm ${
+              checkResult.ok ? 'bg-chaman/10 text-chaman' : 'bg-saffron/15 text-ink'
+            }`}
+          >
+            {checkResult.ok ? (
+              <p className="font-bold">✓ Gemini muammo topmadi</p>
+            ) : (
+              <>
+                <p className="font-bold">⚠️ Gemini quyidagilarni topdi:</p>
+                <ul className="mt-1 list-disc space-y-0.5 pl-5">
+                  {(checkResult.issues || []).map((issue) => (
+                    <li key={issue}>{issue}</li>
+                  ))}
+                </ul>
+                {checkResult.suggestion && (
+                  <p className="mt-1.5">
+                    <b>Taklif:</b> {checkResult.suggestion}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         )}
       </div>
 

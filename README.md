@@ -1,9 +1,11 @@
 # Kahoot UZ 🇺🇿
 
-**O'yin orqali o'rganish platformasi** — Kahoot!ning o'zbekcha, milliy uslubdagi varianti.
-Jonli viktorinalar, o'zbekcha tayyor to'plamlar va milliy do'ppi kiygan quvnoq qahramonlar bilan.
+**Ingliz tili darslari uchun o'yin platformasi** — Kahoot!ning o'zbekcha, milliy uslubdagi varianti.
+O'qituvchi Google/Telegram orqali kiradi, test yaratadi (qo'lda yoki Gemini AI bilan), o'quvchi esa
+faqat PIN kod bilan qo'shiladi. Natijalar (to'g'ri javob, ball, reyting) faqat o'yin **oxirida** ochiladi.
 
 Dizayn tili: Samarqand koshinlari (feruza), suzana kashtasi, anor va 8 qirrali girih yulduzi motivlari.
+Sayt pastida va bosh sahifada **"ZIYOBEK TEAM tomonidan yaratildi"** yozuvi bor.
 
 ---
 
@@ -17,15 +19,25 @@ kahoot uz/
 │   │   │   ├── mascots/     # Mascot.jsx — parametrik SVG qahramon (do'ppi bilan)
 │   │   │   ├── decor/       # Naqsh, 8 qirrali yulduz, anor, bayroq, suzana fon
 │   │   │   └── create/      # Test muharriri: QuestionRail, QuestionEditor,
-│   │   │                    #   AnswerTile, SettingsDrawer, PreviewModal
-│   │   ├── pages/           # Landing.jsx, Create.jsx (/yaratish), MyQuizzes.jsx (/testlarim)
-│   │   ├── lib/             # characters.js, motion.js, quiz.js (model), quizStore.js (localStorage)
+│   │   │                    #   AnswerTile, SettingsDrawer, PreviewModal, GenerateModal (Gemini)
+│   │   ├── pages/           # Landing, Login, Create (/yaratish), MyQuizzes (/testlarim),
+│   │   │                    #   Host (/host/:pin), Play (/o'yin/:pin)
+│   │   ├── lib/             # characters.js, motion.js, quiz.js (model), quizStore.js (server API),
+│   │   │                    #   api.js (fetch wrapper), socket.js (Socket.IO), AuthContext.jsx
 │   │   └── index.css        # dizayn tizimi: ranglar, shriftlar, tugmalar, forma klasslari
 │   └── ...
-└── server/          # Backend negizi — Express 5 + Socket.IO (jonli o'yin)
+└── server/          # Backend — Express 5 + Socket.IO + SQLite (better-sqlite3)
     └── src/
-        ├── index.js        # socket hodisalari: host:create, player:join, lobby:update
-        └── rooms.js        # xotiradagi o'yin xonalari + PIN generatori
+        ├── index.js        # HTTP + Socket.IO: o'yin state machine (question:show → answer:submit → game:ended)
+        ├── auth.js         # Google OAuth + Telegram Login Widget + JWT cookie sessiyasi
+        ├── teachers.js     # O'qituvchi hisoblari (+ har biriga namuna test)
+        ├── quizzes.js      # Test CRUD API (/api/quizzes) — teacher_id bo'yicha ajratilgan
+        ├── db.js           # SQLite ulanishi va sxema (server/data/kahoot.sqlite)
+        ├── rooms.js        # Xotiradagi o'yin xonalari + PIN generatori
+        ├── gameLogic.js    # Javobni tekshirish, ball hisoblash — to'g'ri javob hech qachon oldindan chiqmaydi
+        └── ai/
+            ├── gemini.js   # Gemini SDK chaqiruvlari (tekshirish + generatsiya)
+            └── router.js   # /api/ai/check-question, /api/ai/generate-questions
 ```
 
 ---
@@ -38,10 +50,12 @@ Talab: **Node.js 20+**
 # 1. Barcha bog'liqliklarni o'rnatish
 npm run install:all
 
-# 2. Frontend (http://localhost:5173)
+# 2. server/.env.example'ni server/.env qilib nusxalang va sozlang (pastga qarang)
+
+# 3. Frontend (http://localhost:5173)
 npm run dev:client
 
-# 3. (ixtiyoriy) Jonli o'yin serveri (http://localhost:4000)
+# 4. Jonli o'yin serveri (http://localhost:4000) — endi shart, faqat ixtiyoriy emas
 npm run dev:server
 ```
 
@@ -53,40 +67,80 @@ Ishlab chiqarish uchun frontend build:
 npm run build        # natija: client/dist/
 ```
 
+### 🔑 Kerakli kalitlar (`server/.env`)
+
+`server/.env.example`ni nusxalab, quyidagilarni to'ldiring:
+
+| Kalit | Qayerdan olinadi |
+|---|---|
+| `GOOGLE_CLIENT_ID` / `SECRET` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → OAuth client ID → redirect URI: `http://localhost:5173/api/auth/google/callback` |
+| `TELEGRAM_BOT_TOKEN` / `USERNAME` | @BotFather → `/newbot`, keyin `/setdomain` bilan haqiqiy domen ko'rsating (Telegram Login Widget `localhost`da ishlamaydi — deploy qilingan domen yoki tunnel kerak) |
+| `GEMINI_API_KEY` | [Google AI Studio](https://aistudio.google.com/apikey) |
+
+Kalitlar tayyor bo'lmaguncha `ALLOW_DEV_LOGIN=true` qoldiring — `/login` sahifasida "Sinov sifatida
+kirish" tugmasi orqali auth'siz sinab ko'rish mumkin. **Productionda buni albatta `false` qiling.**
+
+---
+
+## 🌍 Production'ga chiqarish
+
+Frontend (`client/`) va backend (`server/`) **ikki alohida joyga** deploy qilinadi — Netlify/Cloudflare
+Pages statik fayllar uchun, Socket.IO+SQLite server esa doimiy Node jarayonini talab qiladi.
+
+### 1. Backend → Render
+
+1. [render.com](https://render.com)da hisob oching, GitHub repongizni ulang.
+2. "New +" → "Blueprint" → shu repo'ni tanlang — Render root papkadagi [render.yaml](render.yaml) ni
+   avtomatik o'qib, `server/` uchun web xizmat yaratadi.
+3. Render dashboard'da (`sync: false` bo'lgan) maxfiy kalitlarni qo'lda kiriting: `CLIENT_ORIGIN`
+   (keyingi qadamdagi Cloudflare Pages manzili), `GOOGLE_CLIENT_ID/SECRET`, `GOOGLE_CALLBACK_URL`
+   (`https://<render-manzil>.onrender.com/api/auth/google/callback`), `TELEGRAM_BOT_TOKEN/USERNAME`,
+   `GEMINI_API_KEY`.
+4. ⚠️ **Free tarifda disk vaqtinchalik** — har deploy/uyqudan uyg'onishda `kahoot.sqlite` tozalanadi
+   (o'qituvchilar va testlar o'chib ketadi). Real foydalanuvchilar uchun pullik tarifga o'tib
+   "Persistent Disk" qo'shish kerak bo'ladi.
+
+### 2. Frontend → Cloudflare Pages
+
+1. Cloudflare Pages loyihasi sozlamalarida **Environment variables**ga qo'shing:
+   `VITE_API_URL` = Render'dan olingan backend manzili (masalan `https://kahoot-uz-server.onrender.com`,
+   oxirida `/` siz).
+2. Build command: `npm run build` (yoki mavjud `client/wrangler.toml`dagi sozlama), output: `client/dist`.
+
+### 3. Google / Telegram sozlamalarini yangilash
+
+- Google Cloud Console → OAuth client → **Authorized JavaScript origins**ga Cloudflare Pages manzilini,
+  **Authorized redirect URIs**ga `https://<render-manzil>.onrender.com/api/auth/google/callback`ni qo'shing
+  (localhost qatorlarini o'chirish shart emas — ikkalasi baravar tura oladi).
+- Telegram: @BotFather → botingiz → `/setdomain` → Cloudflare Pages domeningizni ko'rsating.
+
 ---
 
 ## ✅ Hozir tayyor
 
-- **Bosh sahifa (landing)** — to'liq responsiv, animatsiyali:
-  - Navbar (mobil menyu bilan), Hero + PIN kiritish kartasi
-  - "Nega Kahoot UZ?" imkoniyatlar bo'limi
-  - Qahramonlar galereyasi (Anora, Bobur, Gulnoza, Sardor)
-  - "Uch qadamda o'yin" yo'riqnomasi
-  - Tayyor viktorinalar vitrinasi
-  - CTA banner + Footer
-- **Test yaratish ekrani** (`/yaratish`) — o'qituvchi to'liq viktorina tuzadi:
-  - 4 xil savol turi: Viktorina, Ko'p javobli, To'g'ri/Noto'g'ri, Yozma javob
-  - Har savolda: matn, ixtiyoriy rasm, 2–4 rangli javob, to'g'ri javob(lar), vaqt (5–120s), ball (oddiy / 2× / ballsiz)
-  - Chap panelda savollarni qo'shish, nusxa olish, tartiblash, o'chirish
-  - "Sozlamalar" oynasi: nomi, tavsif, fan, sinf, mavzu rangi, muqova, ko'rinish
-  - "Ko'rib chiqish" — savolni o'quvchi ko'zi bilan ko'rish
-  - Avtomatik saqlash (localStorage) + tugallanmagan savollar belgisi
-- **Testlarim ekrani** (`/testlarim`) — saqlangan testlar ro'yxati, tahrirlash / nusxa / o'chirish. Birinchi kirishda namuna "O'zbekiston tarixi" testi qo'shiladi.
-- **Qahramon tizimi** — `Mascot` komponenti: rang, do'ppi rangi, aksent va poza (`idle`/`wave`/`cheer`) orqali sozlanadi.
-- **Dizayn tizimi** — `index.css` da milliy rang palitrasi va qayta ishlatiladigan `btn`, `card`, `section`, `field`, `chip` klasslari.
-- `prefers-reduced-motion` hurmat qilinadi.
-- **Server negizi** — xona yaratish, PIN bilan qo'shilish, lobby ro'yxati.
+- **Autentifikatsiya** — o'qituvchi Google yoki Telegram orqali kiradi (JWT httpOnly cookie);
+  o'quvchi hech qanday ro'yxatdan o'tmaydi, faqat PIN kiritadi.
+- **Bosh sahifa (landing)** — Ingliz tili darslariga qaratilgan matn, "ZIYOBEK TEAM" belgisi, animatsiyalar.
+- **Test yaratish ekrani** (`/yaratish`) — 4 xil savol turi, Gemini bilan tekshirish/yaratish, sozlamalar,
+  ko'rib chiqish, endi server API'ga saqlanadi (o'qituvchi hisobiga bog'langan).
+- **Testlarim ekrani** (`/testlarim`) — testlar ro'yxati + "O'yinni boshlash" tugmasi. Har yangi o'qituvchi
+  uchun namuna "Present Simple — asoslari" testi avtomatik yaratiladi.
+- **Jonli o'yin** — Host (`/host/:pin`) va Play (`/o'yin/:pin`) ekranlari: PIN, lobby, savol-javob sikli
+  server tomonidan boshqariladi. **Natijalar (to'g'ri javob, ball, reyting) faqat o'yin oxirida** ochiladi —
+  o'yin davomida hech qanday to'g'ri/noto'g'ri belgisi ko'rsatilmaydi.
+- **Gemini AI** — o'qituvchi qo'lda yozgan savolni Gemini tekshiradi (grammatika, mantiq, to'g'ri javob
+  mosligi); yoki mavzu bo'yicha savollarni Gemini yaratadi va o'zi qayta tekshirib beradi.
+- **Qahramon tizimi** — `Mascot` komponenti: rang, do'ppi rangi, aksent va poza orqali sozlanadi.
+- **Dizayn tizimi** — milliy rang palitrasi, qayta ishlatiladigan klasslar, `prefers-reduced-motion` hurmati.
 
 ## 🔜 Keyingi bosqichlar
 
 | Bosqich | Tavsif |
 |---|---|
-| Host ekrani | Lobby (qo'shilgan o'yinchilar), savolni ko'rsatish, taymer, natijalar |
-| O'yinchi ekrani | Qahramon tanlash, 4 rangli javob tugmalari, ball va reyting |
-| Server o'yin sikli | `question:show` → `answer:submit` → `question:result` → `game:leaderboard` |
-| Ma'lumotlar bazasi | PostgreSQL/Prisma yoki Firebase — viktorinalar va natijalarni saqlash |
-| Autentifikatsiya | O'qituvchi hisoblari |
-| Tayyor kontent | O'zbekiston tarixi, geografiya, Navoiy ijodi, tabiat/fan to'plamlari |
+| Production hosting | Node/Socket.IO serverini Render/Railway/Fly.io kabi doimiy serverga joylash (Netlify/Cloudflare Pages statik fayllar uchun, bu server uchun emas) |
+| SQLite → boshqa DB | Ko'p nusxali (replika) hostingda SQLite fayli yetarli bo'lmasligi mumkin — kerak bo'lsa Postgres'ga o'tish |
+| O'yin tarixi | O'tgan o'yinlar natijasini saqlash va o'qituvchiga statistikani ko'rsatish |
+| Tayyor kontent kutubxonasi | Har xil Ingliz tili mavzulari bo'yicha tayyor testlar to'plami |
 
 ---
 

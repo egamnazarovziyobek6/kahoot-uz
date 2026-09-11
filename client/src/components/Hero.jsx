@@ -4,6 +4,7 @@ import JoinPin from './JoinPin.jsx'
 import Mascot from './mascots/Mascot.jsx'
 import FloatingDecor from './decor/FloatingDecor.jsx'
 import UzFlag from './decor/UzFlag.jsx'
+import CreatorBadge from './CreatorBadge.jsx'
 import { characters } from '../lib/characters.js'
 import { fadeUp, stagger } from '../lib/motion.js'
 
@@ -18,14 +19,14 @@ export default function Hero() {
             variants={fadeUp}
             className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/70 px-4 py-1.5 text-sm font-bold text-ink-soft shadow-sm backdrop-blur"
           >
-            <UzFlag size={18} /> O‘zbekcha ta’lim platformasi
+            <UzFlag size={18} /> Ingliz tili darslari uchun o‘yin platformasi
           </motion.span>
 
           <motion.h1
             variants={fadeUp}
             className="mt-5 text-4xl !leading-[1.16] text-ink sm:text-5xl lg:text-[3.4rem]"
           >
-            Darsni{' '}
+            Ingliz tili darsini{' '}
             <span
               className="box-decoration-clone rounded-lg bg-saffron/40 px-2 py-0.5 text-anor"
               style={{ WebkitBoxDecorationBreak: 'clone' }}
@@ -36,9 +37,14 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p variants={fadeUp} className="mt-5 max-w-xl text-lg text-ink-soft">
-            Kahoot UZ — jonli viktorinalar, o‘zbekcha tayyor to‘plamlar va quvnoq
-            qahramonlar bilan sinfni bir zumda jonlantiradigan o‘yin platformasi.
+            Kahoot UZ — grammatika, lug‘at va tinglab tushunish bo‘yicha jonli viktorinalar,
+            Gemini AI yordamida savol yaratish va quvnoq qahramonlar bilan ingliz tili darsini
+            bir zumda jonlantiring.
           </motion.p>
+
+          <motion.div variants={fadeUp} className="mt-6">
+            <CreatorBadge />
+          </motion.div>
 
           <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-4">
             <Link to="/yaratish" className="btn-primary text-lg">

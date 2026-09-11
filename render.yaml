@@ -1,0 +1,45 @@
+# Render Blueprint — backend (server/) uchun.
+# Render.com'da: "New +" → "Blueprint" → shu GitHub repo'ni tanlang → Render bu faylni o'qib,
+# quyidagi xizmatni avtomatik yaratadi. Maxfiy kalitlar (sync: false) uchun Render sizdan
+# dashboard'da qo'lda kiritishni so'raydi — ular hech qachon shu faylga yozilmaydi.
+#
+# DIQQAT: Free tarifda disk vaqtinchalik — har deploy/uyqudan uyg'onishda
+# server/data/kahoot.sqlite tozalanadi (o'qituvchilar/testlar o'chib ketadi).
+# Doimiy saqlash kerak bo'lsa, pullik tarifga o'tib "Persistent Disk" qo'shing.
+
+services:
+  - type: web
+    name: kahoot-uz-server
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: CLIENT_ORIGIN
+        sync: false # Cloudflare Pages manzilingiz, masalan https://kahoot-uz.pages.dev
+      - key: JWT_SECRET
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: none
+      - key: ALLOW_DEV_LOGIN
+        value: "false" # productionda albatta false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false # https://<render-manzilingiz>.onrender.com/api/auth/google/callback
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_BOT_USERNAME
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash

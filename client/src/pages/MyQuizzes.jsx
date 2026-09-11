@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
 import { characters } from '../lib/characters.js'
+import { useAuth } from '../lib/AuthContext.jsx'
 import { listQuizzes, deleteQuiz, duplicateQuiz } from '../lib/quizStore.js'
 import { validateQuiz } from '../lib/quiz.js'
 
@@ -31,35 +32,65 @@ function fmtDate(ts) {
 }
 
 export default function MyQuizzes() {
-  const [quizzes, setQuizzes] = useState(() => listQuizzes())
+  const navigate = useNavigate()
+  const { teacher, logout } = useAuth()
+  const [quizzes, setQuizzes] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  function refresh() {
-    setQuizzes(listQuizzes())
+  useEffect(() => {
+    refresh()
+  }, [])
+
+  async function refresh() {
+    setLoading(true)
+    try {
+      setQuizzes(await listQuizzes())
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 border-b border-black/5 bg-cream/85 backdrop-blur">
-        <div className="section flex h-16 items-center justify-between">
+        <div className="section flex h-16 items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/logo.svg" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
               Kahoot <span className="text-samarkand">UZ</span>
             </span>
           </Link>
-          <Link to="/yaratish" className="btn-primary !px-4 !py-2 text-sm">
-            + Yangi test
-          </Link>
+          <div className="flex items-center gap-3">
+            {teacher && (
+              <span className="hidden text-sm font-bold text-ink-soft sm:inline">
+                👋 {teacher.name}
+              </span>
+            )}
+            <Link to="/yaratish" className="btn-primary !px-4 !py-2 text-sm">
+              + Yangi test
+            </Link>
+            <button
+              type="button"
+              onClick={async () => {
+                await logout()
+                navigate('/login')
+              }}
+              className="btn-ghost !px-3 !py-2 text-sm"
+              title="Chiqish"
+            >
+              Chiqish
+            </button>
+          </div>
         </div>
       </header>
 
       <main className="section py-10">
         <h1 className="font-display text-3xl font-extrabold text-ink">Mening testlarim</h1>
-        <p className="mt-2 text-ink-soft">
-          Testlar hozircha shu brauzerda saqlanadi. Server ulangach, ular hisobingizga bog‘lanadi.
-        </p>
+        <p className="mt-2 text-ink-soft">Testlaringiz hisobingizga bog‘langan holda saqlanadi.</p>
 
-        {quizzes.length === 0 ? (
+        {loading ? (
+          <p className="mt-12 text-center text-ink-soft">Yuklanmoqda…</p>
+        ) : quizzes.length === 0 ? (
           <div className="mt-12 flex flex-col items-center rounded-2xl border-2 border-dashed border-black/10 py-16 text-center">
             <Mascot character={characters[2]} size={140} pose="wave" />
             <p className="mt-4 font-display text-xl font-extrabold text-ink">
@@ -115,6 +146,15 @@ export default function MyQuizzes() {
                     </div>
 
                     <div className="mt-4 flex flex-wrap gap-2 border-t border-black/5 pt-3">
+                      <button
+                        type="button"
+                        disabled={!v.ok}
+                        onClick={() => navigate(`/host/yangi`, { state: { quizId: q.id } })}
+                        title={!v.ok ? 'Avval testni tugallang' : "O'yinni boshlash"}
+                        className="btn-samarkand !px-3 !py-1.5 text-xs disabled:opacity-40"
+                      >
+                        ▶ Boshlash
+                      </button>
                       <Link
                         to={`/yaratish/${q.id}`}
                         className="btn-ghost !px-3 !py-1.5 text-xs"
@@ -123,8 +163,8 @@ export default function MyQuizzes() {
                       </Link>
                       <button
                         type="button"
-                        onClick={() => {
-                          duplicateQuiz(q.id)
+                        onClick={async () => {
+                          await duplicateQuiz(q.id)
                           refresh()
                         }}
                         className="btn-ghost !px-3 !py-1.5 text-xs"
@@ -133,9 +173,9 @@ export default function MyQuizzes() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
+                        onClick={async () => {
                           if (confirm(`"${q.title || 'Nomsiz test'}" o‘chirilsinmi?`)) {
-                            deleteQuiz(q.id)
+                            await deleteQuiz(q.id)
                             refresh()
                           }
                         }}

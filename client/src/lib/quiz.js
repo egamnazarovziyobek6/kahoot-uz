@@ -26,16 +26,14 @@ export const ANSWER_STYLES = [
 
 export const THEME_COLORS = ['#0E7C9D', '#E24A3B', '#F5A623', '#1B7A4B', '#2B3A8C', '#7A3E9D']
 
+// Ingliz tili darslariga qaratilgan mavzu yo'nalishlari
 export const SUBJECTS = [
-  'Tarix',
-  'Geografiya',
-  'Ona tili va adabiyot',
-  'Matematika',
-  'Fizika',
-  'Kimyo',
-  'Biologiya',
-  'Ingliz tili',
-  'Informatika',
+  'Grammatika',
+  "Lug'at boyligi",
+  "O'qish (Reading)",
+  'Tinglab tushunish (Listening)',
+  'Yozish (Writing)',
+  'Talaffuz (Speaking)',
   'Boshqa',
 ]
 

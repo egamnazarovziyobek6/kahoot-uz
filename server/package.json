@@ -6,12 +6,24 @@
   "description": "Kahoot UZ — jonli o'yin serveri (Socket.IO)",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node --watch src/index.js",
+    "dev": "node --watch --watch-path=src --watch-path=.env src/index.js",
     "start": "node src/index.js"
   },
   "dependencies": {
+    "@google/genai": "^1.0.0",
+    "better-sqlite3": "^11.10.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "socket.io": "^4.8.1"
+  },
+  "allowScripts": {
+    "@google/genai@1.52.0": true,
+    "better-sqlite3@11.10.0": true,
+    "protobufjs@7.6.6": true
   }
 }

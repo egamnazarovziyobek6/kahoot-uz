@@ -2,7 +2,8 @@
 // Ishlab chiqarishda bu Redis yoki DB bilan almashtiriladi.
 
 /** @typedef {{ id: string, name: string, character: string, score: number }} Player */
-/** @typedef {{ pin: string, hostId: string, status: 'lobby'|'active'|'ended', players: Map<string, Player>, quizId: string|null }} Room */
+/** @typedef {{ quiz: object, index: number, answers: Map<string, Map<string, object>>, questionStartedAt: number, timer: NodeJS.Timeout|null }} GameState */
+/** @typedef {{ pin: string, hostId: string, teacherId: string, status: 'lobby'|'active'|'ended', players: Map<string, Player>, quizId: string|null, game: GameState|null }} Room */
 
 /** @type {Map<string, Room>} */
 const rooms = new Map()
@@ -16,10 +17,18 @@ export function generatePin() {
   return pin
 }
 
-export function createRoom(hostId) {
+export function createRoom(hostId, teacherId) {
   const pin = generatePin()
   /** @type {Room} */
-  const room = { pin, hostId, status: 'lobby', players: new Map(), quizId: null }
+  const room = {
+    pin,
+    hostId,
+    teacherId,
+    status: 'lobby',
+    players: new Map(),
+    quizId: null,
+    game: null,
+  }
   rooms.set(pin, room)
   return room
 }
@@ -49,6 +58,7 @@ export function removePlayer(playerId) {
 export function closeRoom(hostId) {
   for (const [pin, room] of rooms) {
     if (room.hostId === hostId) {
+      if (room.game?.timer) clearTimeout(room.game.timer)
       rooms.delete(pin)
       return room
     }

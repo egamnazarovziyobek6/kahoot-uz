@@ -50,7 +50,9 @@ export default function Footer() {
       <div className="border-t border-black/5">
         <div className="section flex flex-col items-center justify-between gap-2 py-6 text-sm text-ink-soft sm:flex-row">
           <p>© {new Date().getFullYear()} Kahoot UZ. Barcha huquqlar himoyalangan.</p>
-          <p>O‘zbekistonda ❤️ bilan yaratildi</p>
+          <p className="font-display text-base font-extrabold text-ink">
+            <span className="text-anor">ZIYOBEK TEAM</span> tomonidan yaratildi
+          </p>
         </div>
       </div>
     </footer>

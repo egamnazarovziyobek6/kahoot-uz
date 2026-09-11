@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, useAnimationControls } from 'motion/react'
 
 export default function JoinPin() {
+  const navigate = useNavigate()
   const [pin, setPin] = useState('')
   const [msg, setMsg] = useState(null)
-  const [busy, setBusy] = useState(false)
   const shake = useAnimationControls()
 
   function onChange(e) {
@@ -13,21 +14,14 @@ export default function JoinPin() {
     if (msg) setMsg(null)
   }
 
-  async function onSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault()
     if (pin.length < 6) {
       shake.start({ x: [0, -10, 10, -8, 8, 0], transition: { duration: 0.4 } })
       setMsg({ type: 'error', text: 'PIN kodi 6 xonali bo‘lishi kerak.' })
       return
     }
-    setBusy(true)
-    setMsg(null)
-    await new Promise((r) => setTimeout(r, 900))
-    setBusy(false)
-    setMsg({
-      type: 'info',
-      text: 'Tez orada! Jonli o‘yin serveri ulanmoqda — hozircha demo rejimda.',
-    })
+    navigate(`/o'yin/${pin}`)
   }
 
   return (
@@ -72,11 +66,10 @@ export default function JoinPin() {
 
       <motion.button
         type="submit"
-        disabled={busy}
         whileTap={{ scale: 0.97 }}
-        className="btn-samarkand mt-4 w-full disabled:opacity-70"
+        className="btn-samarkand mt-4 w-full"
       >
-        {busy ? 'Ulanmoqda…' : 'Kirish'}
+        Kirish
       </motion.button>
     </motion.form>
   )

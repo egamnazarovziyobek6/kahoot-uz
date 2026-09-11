@@ -32,3 +32,6 @@ Thumbs.db
 # Vite / test
 .vite/
 coverage/
+
+# Lokal ma'lumotlar bazasi (SQLite)
+server/data/

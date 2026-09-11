@@ -5,7 +5,7 @@ const steps = [
   {
     n: 1,
     title: 'Viktorina tayyorlang',
-    text: 'Noldan yarating yoki tayyor o‘zbekcha to‘plamlardan birini tanlang.',
+    text: 'Savollarni o‘zingiz yozing yoki mavzuni kiriting — Gemini AI yaratib, tekshirib beradi.',
     emoji: '✏️',
   },
   {

@@ -4,6 +4,7 @@ import QuestionRail from '../components/create/QuestionRail.jsx'
 import QuestionEditor from '../components/create/QuestionEditor.jsx'
 import SettingsDrawer from '../components/create/SettingsDrawer.jsx'
 import PreviewModal from '../components/create/PreviewModal.jsx'
+import GenerateModal from '../components/create/GenerateModal.jsx'
 import {
   makeQuiz,
   makeQuestion,
@@ -11,12 +12,25 @@ import {
   cloneQuestion,
   validateQuiz,
   estimateDuration,
+  TIME_OPTIONS,
   MAX_ANSWERS,
   MIN_ANSWERS,
 } from '../lib/quiz.js'
-import { getQuiz, saveQuiz, listQuizzes } from '../lib/quizStore.js'
+import { getQuiz, saveQuiz } from '../lib/quizStore.js'
 
 const isChoiceType = (t) => t === 'quiz' || t === 'multi'
+const QUESTION_TYPE_KEYS = ['quiz', 'multi', 'truefalse', 'input']
+
+/** Gemini javobidagi savol taslagini quiz.js data-modeliga aylantiradi */
+function questionFromDraft(draft) {
+  const base = makeQuestion(QUESTION_TYPE_KEYS.includes(draft.type) ? draft.type : 'quiz')
+  const answers =
+    Array.isArray(draft.answers) && draft.answers.length
+      ? draft.answers.map((a) => makeAnswer(a.text || '', Boolean(a.correct)))
+      : base.answers
+  const timeLimit = TIME_OPTIONS.includes(draft.timeLimit) ? draft.timeLimit : base.timeLimit
+  return { ...base, text: draft.text || '', answers, timeLimit }
+}
 
 /** Savol turini almashtirish — imkon qadar javoblarni saqlab qolamiz */
 function changeType(prev, type) {
@@ -71,6 +85,15 @@ function reducer(state, action) {
     case 'addQuestion': {
       const nq = makeQuestion(action.qtype || 'quiz')
       return { quiz: { ...quiz, questions: [...quiz.questions, nq] }, selectedId: nq.id }
+    }
+
+    case 'addGeneratedQuestions': {
+      const drafts = action.drafts.map(questionFromDraft)
+      if (!drafts.length) return state
+      return {
+        quiz: { ...quiz, questions: [...quiz.questions, ...drafts] },
+        selectedId: drafts[0].id,
+      }
     }
 
     case 'duplicateQuestion': {
@@ -183,25 +206,33 @@ export default function Create() {
   const [status, setStatus] = useState('idle') // idle | saving | saved
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false)
+  const [generateOpen, setGenerateOpen] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
   const firstRun = useRef(true)
   const isNew = useRef(false)
 
   // Yuklash / yangi test yaratish
   useEffect(() => {
+    let cancelled = false
     firstRun.current = true
-    if (id) {
-      const found = getQuiz(id)
-      if (found) {
-        isNew.current = false
-        dispatch({ type: 'load', quiz: found })
+    async function load() {
+      if (id) {
+        const found = await getQuiz(id)
+        if (cancelled) return
+        if (found) {
+          isNew.current = false
+          dispatch({ type: 'load', quiz: found })
+        } else {
+          navigate('/yaratish', { replace: true })
+        }
       } else {
-        navigate('/yaratish', { replace: true })
+        isNew.current = true
+        dispatch({ type: 'load', quiz: makeQuiz() })
       }
-    } else {
-      listQuizzes() // birinchi kirishda namuna testni yaratadi
-      isNew.current = true
-      dispatch({ type: 'load', quiz: makeQuiz() })
+    }
+    load()
+    return () => {
+      cancelled = true
     }
   }, [id, navigate])
 
@@ -214,8 +245,8 @@ export default function Create() {
       return
     }
     setStatus('saving')
-    const t = setTimeout(() => {
-      const { ok } = saveQuiz(quiz)
+    const t = setTimeout(async () => {
+      const { ok } = await saveQuiz(quiz)
       setStatus(ok ? 'saved' : 'idle')
       if (ok && isNew.current) {
         isNew.current = false
@@ -237,13 +268,13 @@ export default function Create() {
     quiz.questions.find((q) => q.id === state.selectedId) ?? quiz.questions[0]
   const selectedIndex = quiz.questions.findIndex((q) => q.id === selected.id)
 
-  function finishAndExit() {
+  async function finishAndExit() {
     if (!validation.ok) {
       setShowErrors(true)
       setSettingsOpen(!quiz.title.trim())
       return
     }
-    saveQuiz(quiz)
+    await saveQuiz(quiz)
     navigate('/testlarim')
   }
 
@@ -270,6 +301,13 @@ export default function Create() {
           {status === 'saving' ? 'Saqlanmoqda…' : status === 'saved' ? 'Saqlandi ✓' : ''}
         </span>
 
+        <button
+          type="button"
+          onClick={() => setGenerateOpen(true)}
+          className="btn-ghost !px-3 !py-2 text-sm"
+        >
+          ✨ <span className="hidden sm:inline">Gemini bilan yaratish</span>
+        </button>
         <button
           type="button"
           onClick={() => setPreviewOpen(true)}
@@ -308,6 +346,7 @@ export default function Create() {
             question={selected}
             index={selectedIndex}
             total={quiz.questions.length}
+            subject={quiz.subject}
             errors={showErrors ? validation.questions[selectedIndex] : []}
             onPatch={(patch) => dispatch({ type: 'patchQuestion', id: selected.id, patch })}
             onSetType={(qtype) => dispatch({ type: 'setType', id: selected.id, qtype })}
@@ -347,6 +386,12 @@ export default function Create() {
         quiz={quiz}
         startIndex={selectedIndex}
         onClose={() => setPreviewOpen(false)}
+      />
+
+      <GenerateModal
+        open={generateOpen}
+        onClose={() => setGenerateOpen(false)}
+        onInsert={(drafts) => dispatch({ type: 'addGeneratedQuestions', drafts })}
       />
     </div>
   )

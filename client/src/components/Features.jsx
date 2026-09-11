@@ -9,9 +9,9 @@ const features = [
     tint: 'bg-anor/10',
   },
   {
-    icon: '📚',
-    title: 'O‘zbekcha kontent',
-    text: 'Tarix, adabiyot, geografiya va fan bo‘yicha tayyor to‘plamlar — darhol o‘ynang.',
+    icon: '🤖',
+    title: 'Gemini AI yordamchisi',
+    text: 'Mavzuni yozing — Gemini savollarni yaratadi va o‘zi tekshirib beradi. Yoki o‘zingiz yozing, Gemini xatoni topadi.',
     tint: 'bg-samarkand/10',
   },
   {
