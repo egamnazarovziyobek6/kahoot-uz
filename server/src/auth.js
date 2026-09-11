@@ -62,7 +62,7 @@ if (googleEnabled) {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL:
-          process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5173/api/auth/google/callback',
+          process.env.GOOGLE_CALLBACK_URL || 'https://kahoot-uz-server.onrender.com/api/auth/google/callback',
       },
       (_accessToken, _refreshToken, profile, done) => {
         const teacher = upsertTeacher({

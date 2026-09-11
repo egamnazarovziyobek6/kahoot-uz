@@ -2,7 +2,8 @@
 // Lokalda bo'sh qoldiriladi (Vite proxy /api ni :4000 ga yo'naltiradi). Productionda
 // frontend (Cloudflare Pages) va backend (masalan Render) boshqa-boshqa domenda turgani
 // uchun to'liq backend manzili VITE_API_URL orqali beriladi (build vaqtida sozlanadi).
-const API_ORIGIN = import.meta.env.VITE_API_URL || ''
+const defaultBackend = import.meta.env.PROD ? 'https://kahoot-uz-server.onrender.com' : ''
+export const API_ORIGIN = (import.meta.env.VITE_API_URL || defaultBackend).replace(/\/$/, '')
 const BASE = `${API_ORIGIN}/api`
 
 async function request(path, options = {}) {
