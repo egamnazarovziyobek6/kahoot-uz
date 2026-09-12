@@ -112,7 +112,10 @@ export default function CameraCapture({ onCapture, onClose }) {
         className="w-full max-w-sm rounded-3xl border border-white/10 bg-surface p-6 text-center shadow-pop"
       >
         <h2 className="font-display text-lg font-extrabold text-ink">📷 Selfi olish</h2>
-        <p className="mt-1 text-sm text-ink-soft">Bu rasm faqat profilingizda ko'rinadi.</p>
+        <p className="mt-1 text-sm text-ink-soft">
+          Bu rasm profilingizda ko'rinadi. Nomaqbul tarkibning oldini olish uchun rasmlar moderatsiya
+          tekshiruvidan o'tishi mumkin.
+        </p>
 
         <div className="mx-auto mt-4 aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-cream-deep">
           {error ? (

@@ -24,6 +24,12 @@ export default function Login() {
     if (!loading && teacher) navigate('/testlarim', { replace: true })
   }, [loading, teacher, navigate])
 
+  useEffect(() => {
+    const xato = new URLSearchParams(window.location.search).get('xato')
+    if (xato === 'bloklangan') setError('Hisobingiz admin tomonidan bloklangan.')
+    else if (xato === 'google') setError("Google bilan kirishda xatolik yuz berdi. Qayta urinib ko'ring.")
+  }, [])
+
   const googleEnabled = config ? config.googleEnabled !== false : true
   const telegramEnabled = config ? config.telegramEnabled !== false : true
 

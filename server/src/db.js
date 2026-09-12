@@ -59,6 +59,12 @@ const teacherColumns = db.prepare('PRAGMA table_info(teachers)').all().map((c) =
 if (!teacherColumns.includes('is_verified')) {
   db.exec('ALTER TABLE teachers ADD COLUMN is_verified INTEGER NOT NULL DEFAULT 0')
 }
+if (!teacherColumns.includes('is_blocked')) {
+  db.exec('ALTER TABLE teachers ADD COLUMN is_blocked INTEGER NOT NULL DEFAULT 0')
+}
+if (!teacherColumns.includes('is_admin')) {
+  db.exec('ALTER TABLE teachers ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0')
+}
 
 const forumPostColumns = db.prepare('PRAGMA table_info(forum_posts)').all().map((c) => c.name)
 if (!forumPostColumns.includes('repost_of')) {

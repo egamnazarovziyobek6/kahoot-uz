@@ -9,6 +9,7 @@ import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { PRIMARY_CLIENT_ORIGIN } from './clientOrigins.js'
 import { getTeacherById, publicTeacher, updateAvatar, upsertTeacher } from './teachers.js'
+import { notifyModerators } from './moderation.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-almashtiring'
 const COOKIE_NAME = 'kahoot_uz_token'
@@ -28,20 +29,26 @@ function teacherFromToken(token) {
   if (!token) return null
   try {
     const payload = jwt.verify(token, JWT_SECRET)
-    return getTeacherById(payload.sub)
+    const teacher = getTeacherById(payload.sub)
+    // Bloklangan hisob — token haqiqiy bo'lsa ham hech qanday harakat qila olmaydi
+    if (teacher?.is_blocked) return null
+    return teacher
   } catch {
     return null
   }
 }
 
-/** Admin deb belgilangan email manzillar ro'yxati (server/.env: ADMIN_EMAILS=a@b.com,c@d.com) */
+/** Admin deb belgilangan email manzillar ro'yxati (server/.env: ADMIN_EMAILS=a@b.com,c@d.com) —
+ * bu doim admin bo'lib qoladi (boshqa adminlar noto'g'ri o'chirib qo'ysa ham tizimdan chiqib qolmaslik uchun) */
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
   .split(',')
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean)
 
 export function isAdmin(teacher) {
-  return Boolean(teacher?.email && ADMIN_EMAILS.includes(teacher.email.toLowerCase()))
+  if (!teacher) return false
+  if (teacher.email && ADMIN_EMAILS.includes(teacher.email.toLowerCase())) return true
+  return Boolean(teacher.is_admin)
 }
 
 /** Express middleware — himoyalangan route'lar uchun */
@@ -153,6 +160,9 @@ authRouter.get(
     })(req, res, next)
   },
   (req, res) => {
+    if (req.user?.is_blocked) {
+      return res.redirect(`${CLIENT_ORIGIN}/login?xato=bloklangan`)
+    }
     res.cookie(COOKIE_NAME, signTeacher(req.user), COOKIE_OPTIONS)
     res.redirect(`${CLIENT_ORIGIN}/testlarim`)
   },
@@ -172,6 +182,7 @@ authRouter.post('/telegram', (req, res) => {
     email: null,
     avatar: req.body.photo_url,
   })
+  if (teacher.is_blocked) return res.status(403).json({ error: 'Hisobingiz bloklangan' })
   res.cookie(COOKIE_NAME, signTeacher(teacher), COOKIE_OPTIONS)
   res.json({ ok: true, teacher: publicTeacher(teacher) })
 })
@@ -201,6 +212,10 @@ authRouter.put('/avatar', requireAuth, (req, res) => {
     return res.status(400).json({ error: "Rasm noto'g'ri formatda yoki juda katta" })
   }
   const teacher = updateAvatar(req.teacher.id, avatar)
+  notifyModerators(
+    avatar,
+    `🖼 Yangi profil rasmi\n${teacher.name}${teacher.email ? ` (${teacher.email})` : ''}`,
+  )
   res.json({ teacher: { ...publicTeacher(teacher), isAdmin: isAdmin(teacher) } })
 })
 

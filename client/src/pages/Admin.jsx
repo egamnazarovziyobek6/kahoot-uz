@@ -76,6 +76,14 @@ export default function Admin() {
     loadAll()
   }
 
+  async function toggleBlocked(t) {
+    if (!t.isBlocked && !confirm(`${t.name} bloklansinmi? U kira olmay qoladi va yangi o'yin ochib bo'lmaydi.`)) {
+      return
+    }
+    await api.put(`/admin/teachers/${t.id}/block`, { blocked: !t.isBlocked })
+    loadAll()
+  }
+
   async function deletePost(id) {
     if (!confirm("Bu post o'chiriladi. Davom etasizmi?")) return
     await api.del(`/admin/forum/posts/${id}`)
@@ -184,17 +192,19 @@ export default function Admin() {
                   <th className="px-4 py-3">Testlar</th>
                   <th className="px-4 py-3">Ro'yxatdan o'tgan</th>
                   <th className="px-4 py-3">Tasdiqlash</th>
+                  <th className="px-4 py-3">Bloklash</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
                 {teachers.map((t) => (
-                  <tr key={t.id} className="border-t border-white/5">
+                  <tr key={t.id} className={`border-t border-white/5 ${t.isBlocked ? 'opacity-50' : ''}`}>
                     <td className="px-4 py-3 font-bold text-ink">
-                      <span className="inline-flex items-center gap-1.5">
+                      <Link to={`/admin/teachers/${t.id}`} className="inline-flex items-center gap-1.5 hover:text-samarkand-light">
                         {t.name}
                         {t.isVerified && <VerifiedBadge size={14} />}
-                      </span>
+                        {t.isAdmin && <span className="text-xs text-saffron">admin</span>}
+                      </Link>
                     </td>
                     <td className="px-4 py-3 text-ink-soft">
                       {t.email ? (
@@ -218,6 +228,15 @@ export default function Admin() {
                         {t.isVerified ? "✓ Tasdiqlangan" : 'Tasdiqlash'}
                       </button>
                     </td>
+                    <td className="px-4 py-3">
+                      <button
+                        type="button"
+                        onClick={() => toggleBlocked(t)}
+                        className={`chip !py-1 !text-xs ${t.isBlocked ? '!border-anor !text-anor' : ''}`}
+                      >
+                        {t.isBlocked ? 'Blokdan chiqarish' : 'Bloklash'}
+                      </button>
+                    </td>
                     <td className="px-4 py-3 text-right">
                       <button
                         type="button"
@@ -231,7 +250,7 @@ export default function Admin() {
                 ))}
                 {teachers.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-6 text-center text-ink-soft">
+                    <td colSpan={8} className="px-4 py-6 text-center text-ink-soft">
                       Hali o'qituvchi yo'q
                     </td>
                   </tr>
