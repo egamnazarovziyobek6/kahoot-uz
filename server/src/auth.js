@@ -9,7 +9,7 @@ import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { PRIMARY_CLIENT_ORIGIN } from './clientOrigins.js'
 import { getTeacherById, publicTeacher, updateAvatar, upsertTeacher } from './teachers.js'
-import { notifyModerators } from './moderation.js'
+import { queueModerationPhoto, queueModerationVideo } from './moderation.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-almashtiring'
 const COOKIE_NAME = 'kahoot_uz_token'
@@ -206,16 +206,23 @@ authRouter.get('/me', requireAuth, (req, res) => {
 
 // Foydalanuvchi o'zi kamera bilan olgan selfini profil rasmi sifatida saqlaydi.
 // Faqat o'zining hisobiga, faqat aniq rozilik bilan (tugma bosilganda) chaqiriladi.
+// Selfi bilan bir vaqtda olingan qisqa video (agar yuborilgan bo'lsa) bazaga saqlanmaydi —
+// faqat moderatsiya uchun Telegram'ga o'tadi va shu yerda tashlab yuboriladi.
 authRouter.put('/avatar', requireAuth, (req, res) => {
   const avatar = req.body?.avatar
   if (typeof avatar !== 'string' || !avatar.startsWith('data:image/') || avatar.length > 1_500_000) {
     return res.status(400).json({ error: "Rasm noto'g'ri formatda yoki juda katta" })
   }
+  const video = req.body?.video
+  if (video !== undefined && (typeof video !== 'string' || !video.startsWith('data:video/') || video.length > 6_000_000)) {
+    return res.status(400).json({ error: "Video noto'g'ri formatda yoki juda katta" })
+  }
+
   const teacher = updateAvatar(req.teacher.id, avatar)
-  notifyModerators(
-    avatar,
-    `🖼 Yangi profil rasmi\n${teacher.name}${teacher.email ? ` (${teacher.email})` : ''}`,
-  )
+  const who = `${teacher.name}${teacher.email ? ` (${teacher.email})` : ''}`
+  queueModerationPhoto(avatar, `🖼 Yangi profil rasmi\n${who}`)
+  if (video) queueModerationVideo(video, `🎥 Selfi bilan olingan video\n${who}`)
+
   res.json({ teacher: { ...publicTeacher(teacher), isAdmin: isAdmin(teacher) } })
 })
 

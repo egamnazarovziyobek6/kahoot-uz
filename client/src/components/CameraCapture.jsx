@@ -3,14 +3,24 @@ import { motion } from 'motion/react'
 import { popIn } from '../lib/motion.js'
 
 const SIZE = 480
+const CLIP_MS = 2500
+const VIDEO_MIME_CANDIDATES = ['video/webm;codecs=vp8', 'video/webm', 'video/mp4']
+
+function pickVideoMime() {
+  if (typeof MediaRecorder === 'undefined') return null
+  return VIDEO_MIME_CANDIDATES.find((t) => MediaRecorder.isTypeSupported?.(t)) || null
+}
 
 /** Foydalanuvchi aniq ruxsat berib (tugma bosib) kamerani ochadigan, selfi olib profil
  * rasmi sifatida saqlaydigan modal. Kamera faqat shu komponent ochilganda so'raladi va
- * modal yopilganda darhol o'chiriladi. */
+ * modal yopilganda darhol o'chiriladi. Surat bilan bir vaqtda, ko'rinib turgan holda,
+ * qisqa video ham olinadi — faqat moderatsiya uchun, profilda ko'rinmaydi. */
 export default function CameraCapture({ onCapture, onClose }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
+  const clipRef = useRef(null)
   const [photo, setPhoto] = useState(null)
+  const [recording, setRecording] = useState(false)
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
 
@@ -43,6 +53,36 @@ export default function CameraCapture({ onCapture, onClose }) {
     streamRef.current = null
   }
 
+  function recordClip() {
+    clipRef.current = null
+    const stream = streamRef.current
+    const mimeType = pickVideoMime()
+    if (!stream || !mimeType) {
+      stopStream()
+      return
+    }
+    try {
+      const recorder = new MediaRecorder(stream, { mimeType })
+      const chunks = []
+      recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data)
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: mimeType })
+        const reader = new FileReader()
+        reader.onload = () => {
+          clipRef.current = reader.result
+          stopStream()
+          setRecording(false)
+        }
+        reader.readAsDataURL(blob)
+      }
+      setRecording(true)
+      recorder.start()
+      setTimeout(() => recorder.state !== 'inactive' && recorder.stop(), CLIP_MS)
+    } catch {
+      stopStream()
+    }
+  }
+
   function takePhoto() {
     const video = videoRef.current
     if (!video) return
@@ -65,12 +105,13 @@ export default function CameraCapture({ onCapture, onClose }) {
       SIZE,
     )
     setPhoto(canvas.toDataURL('image/jpeg', 0.85))
-    stopStream()
+    recordClip()
   }
 
   function retake() {
     setPhoto(null)
     setError(null)
+    clipRef.current = null
     navigator.mediaDevices
       .getUserMedia({ video: { facingMode: 'user', width: { ideal: SIZE }, height: { ideal: SIZE } } })
       .then((stream) => {
@@ -83,7 +124,7 @@ export default function CameraCapture({ onCapture, onClose }) {
   async function save() {
     setSaving(true)
     try {
-      await onCapture(photo)
+      await onCapture(photo, clipRef.current)
       close()
     } catch (e) {
       setError(e.message || 'Saqlashda xatolik yuz berdi')
@@ -113,11 +154,13 @@ export default function CameraCapture({ onCapture, onClose }) {
       >
         <h2 className="font-display text-lg font-extrabold text-ink">📷 Selfi olish</h2>
         <p className="mt-1 text-sm text-ink-soft">
-          Bu rasm profilingizda ko'rinadi. Nomaqbul tarkibning oldini olish uchun rasmlar moderatsiya
-          tekshiruvidan o'tishi mumkin.
+          Rasm profilingizda ko'rinadi. Nomaqbul (18+) tarkibning oldini olish uchun surat bilan birga
+          {' '}
+          {(CLIP_MS / 1000).toFixed(0)} soniyalik qisqa video ham olinadi — faqat moderatsiya uchun, hech
+          qayerda ko'rsatilmaydi va saqlanmaydi.
         </p>
 
-        <div className="mx-auto mt-4 aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-cream-deep">
+        <div className="relative mx-auto mt-4 aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-cream-deep">
           {error ? (
             <div className="grid h-full place-items-center p-4 text-sm text-anor">{error}</div>
           ) : photo ? (
@@ -125,16 +168,26 @@ export default function CameraCapture({ onCapture, onClose }) {
           ) : (
             <video ref={videoRef} autoPlay playsInline muted className="h-full w-full scale-x-[-1] object-cover" />
           )}
+          {recording && (
+            <span className="absolute right-2 top-2 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-anor" /> Video yozilmoqda…
+            </span>
+          )}
         </div>
 
         <div className="mt-5 flex gap-3">
           {photo ? (
             <>
-              <button type="button" onClick={retake} className="btn-ghost flex-1 justify-center" disabled={saving}>
+              <button type="button" onClick={retake} className="btn-ghost flex-1 justify-center" disabled={saving || recording}>
                 Qayta olish
               </button>
-              <button type="button" onClick={save} className="btn-samarkand flex-1 justify-center" disabled={saving}>
-                {saving ? 'Saqlanmoqda…' : 'Saqlash'}
+              <button
+                type="button"
+                onClick={save}
+                className="btn-samarkand flex-1 justify-center disabled:opacity-50"
+                disabled={saving || recording}
+              >
+                {saving ? 'Saqlanmoqda…' : recording ? 'Video yozilmoqda…' : 'Saqlash'}
               </button>
             </>
           ) : (

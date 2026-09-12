@@ -220,7 +220,7 @@ export default function MyQuizzes() {
 
       {showCamera && (
         <CameraCapture
-          onCapture={(dataUrl) => updateAvatar(dataUrl)}
+          onCapture={(dataUrl, video) => updateAvatar(dataUrl, video)}
           onClose={() => setShowCamera(false)}
         />
       )}
