@@ -8,10 +8,12 @@ import Donate from '../components/Donate.jsx'
 import CtaBanner from '../components/CtaBanner.jsx'
 import Footer from '../components/Footer.jsx'
 import NaqshDivider from '../components/decor/NaqshDivider.jsx'
+import WelcomeModal from '../components/WelcomeModal.jsx'
 
 export default function Landing() {
   return (
     <div className="min-h-screen">
+      <WelcomeModal />
       <Navbar />
       <main>
         <Hero />

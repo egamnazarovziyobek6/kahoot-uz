@@ -36,6 +36,42 @@ export const characters = [
     accent: '#FFC94D',
     blurb: "Jamoa o'yinida hamma uni tanlaydi — chunki u doim yordam beradi.",
   },
+  {
+    id: 'malika',
+    name: 'Malika',
+    role: 'Tezkor o‘yinchi',
+    color: '#6A5CF5',
+    doppiColor: '#12213A',
+    accent: '#33E0E8',
+    blurb: "Har doim birinchi javob beradi — reflekslari chaqmoqdek tez.",
+  },
+  {
+    id: 'jasur',
+    name: 'Jasur',
+    role: 'Streak ustasi',
+    color: '#FF4D5E',
+    doppiColor: '#0B1220',
+    accent: '#FFC94D',
+    blurb: "Ketma-ket to'g'ri javoblar bilan reyting cho'qqisini egallaydi.",
+  },
+  {
+    id: 'nilufar',
+    name: 'Nilufar',
+    role: "Lug'at ustasi",
+    color: '#33E0E8',
+    doppiColor: '#2B3A8C',
+    accent: '#FF4D5E',
+    blurb: "Har bir so'zning tagiga yetadi. Lug'at savollarida unga teng kelmaydi.",
+  },
+  {
+    id: 'davron',
+    name: 'Davron',
+    role: 'Xotirjam strateg',
+    color: '#F5A623',
+    doppiColor: '#0B1220',
+    accent: '#2FD583',
+    blurb: "Shoshilmaydi, lekin hech qachon xato qilmaydi.",
+  },
 ]
 
 export const quizzes = [

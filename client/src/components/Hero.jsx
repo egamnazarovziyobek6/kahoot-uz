@@ -17,7 +17,7 @@ export default function Hero() {
         <motion.div variants={stagger} initial="hidden" animate="show">
           <motion.span
             variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/70 px-4 py-1.5 text-sm font-bold text-ink-soft shadow-sm backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-white/5 bg-surface/70 px-4 py-1.5 text-sm font-bold text-ink-soft shadow-sm backdrop-blur"
           >
             <UzFlag size={18} /> Ingliz tili darslari uchun o‘yin platformasi
           </motion.span>

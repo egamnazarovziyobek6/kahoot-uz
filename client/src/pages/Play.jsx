@@ -116,14 +116,14 @@ export default function Play() {
           initial="hidden"
           animate="show"
           onSubmit={join}
-          className="w-full max-w-sm rounded-3xl border border-black/5 bg-white p-6 text-center shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
+          className="w-full max-w-sm rounded-3xl border border-white/5 bg-surface p-6 text-center shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
         >
           <p className="text-sm font-bold text-ink-soft">PIN {pin}</p>
           <div className="my-4 flex justify-center">
             <Mascot character={selected} size={110} pose="wave" />
           </div>
 
-          <div className="mb-4 flex justify-center gap-2">
+          <div className="mb-4 flex flex-wrap justify-center gap-2">
             {characters.map((c) => (
               <button
                 key={c.id}

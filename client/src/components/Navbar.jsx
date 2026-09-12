@@ -13,7 +13,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-cream/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-cream/80 backdrop-blur-md">
       <nav className="section flex h-16 items-center justify-between gap-4">
         <a href="#top" className="flex items-center gap-2.5">
           <img src="/logo.svg" alt="" width={38} height={38} className="drop-shadow-sm" />
@@ -46,7 +46,7 @@ export default function Navbar() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="grid h-10 w-10 place-items-center rounded-xl border-2 border-black/10 bg-white/70 lg:hidden"
+          className="grid h-10 w-10 place-items-center rounded-xl border-2 border-white/10 bg-surface/70 lg:hidden"
           aria-label="Menyu"
           aria-expanded={open}
         >
@@ -60,7 +60,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-black/5 bg-cream lg:hidden"
+            className="overflow-hidden border-t border-white/5 bg-cream lg:hidden"
           >
             <ul className="section flex flex-col gap-1 py-3">
               {links.map((l) => (
@@ -68,7 +68,7 @@ export default function Navbar() {
                   <a
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 font-semibold text-ink-soft hover:bg-white"
+                    className="block rounded-xl px-3 py-2.5 font-semibold text-ink-soft hover:bg-surface"
                   >
                     {l.label}
                   </a>

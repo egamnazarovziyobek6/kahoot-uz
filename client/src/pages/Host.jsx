@@ -152,7 +152,7 @@ export default function Host() {
                   className="flex flex-col items-center gap-1"
                 >
                   <Mascot character={character} size={64} pose="wave" />
-                  <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-extrabold text-ink shadow">
+                  <span className="rounded-full bg-surface px-2.5 py-0.5 text-xs font-extrabold text-ink shadow">
                     {p.name}
                   </span>
                 </motion.div>
@@ -298,7 +298,7 @@ export default function Host() {
                 <motion.li
                   key={p.id}
                   variants={bounceIn}
-                  className="flex items-center justify-between rounded-xl bg-white px-4 py-2 shadow"
+                  className="flex items-center justify-between rounded-xl bg-surface px-4 py-2 shadow"
                 >
                   <span className="font-bold text-ink-soft">
                     {p.rank}. {p.name}

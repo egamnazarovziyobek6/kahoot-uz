@@ -120,13 +120,13 @@ export default function QuestionEditor({
         />
 
         {/* Rasm */}
-        <div className="mt-3 border-t border-black/5 pt-3">
+        <div className="mt-3 border-t border-white/5 pt-3">
           {q.image ? (
             <div className="relative inline-block">
               <img
                 src={q.image}
                 alt="Savol rasmi"
-                className="max-h-56 rounded-xl border border-black/10 object-contain"
+                className="max-h-56 rounded-xl border border-white/10 object-contain"
               />
               <button
                 type="button"
@@ -138,7 +138,7 @@ export default function QuestionEditor({
               </button>
             </div>
           ) : (
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-black/15 px-3 py-2 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-white/15 px-3 py-2 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
               🖼️ Rasm qo‘shish (ixtiyoriy)
               <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
             </label>
@@ -259,7 +259,7 @@ export default function QuestionEditor({
       </div>
 
       {/* Savol sozlamalari */}
-      <div className="mt-6 grid gap-4 rounded-2xl border border-black/10 bg-white/70 p-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 rounded-2xl border border-white/10 bg-surface/70 p-4 sm:grid-cols-2">
         <div>
           <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-ink-soft">
             Vaqt chegarasi

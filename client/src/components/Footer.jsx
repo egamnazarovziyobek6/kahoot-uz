@@ -15,7 +15,7 @@ const cols = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-black/5 bg-white/60">
+    <footer className="border-t border-white/5 bg-surface/60">
       <div className="section grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
@@ -47,7 +47,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="border-t border-black/5">
+      <div className="border-t border-white/5">
         <div className="section flex flex-col items-center justify-between gap-2 py-6 text-sm text-ink-soft sm:flex-row">
           <p>© {new Date().getFullYear()} Kahoot UZ. Barcha huquqlar himoyalangan.</p>
           <p className="font-display text-base font-extrabold text-ink">

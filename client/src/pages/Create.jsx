@@ -281,10 +281,10 @@ export default function Create() {
   return (
     <div className="flex h-screen flex-col bg-cream">
       {/* Yuqori panel */}
-      <header className="flex items-center gap-3 border-b border-black/10 bg-white/80 px-3 py-2.5 backdrop-blur">
+      <header className="flex items-center gap-3 border-b border-white/10 bg-surface/80 px-3 py-2.5 backdrop-blur">
         <Link
           to="/testlarim"
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border-2 border-black/10 bg-white"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border-2 border-white/10 bg-surface"
           title="Testlarim"
         >
           ←

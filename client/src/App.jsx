@@ -5,6 +5,7 @@ import Create from './pages/Create.jsx'
 import MyQuizzes from './pages/MyQuizzes.jsx'
 import Host from './pages/Host.jsx'
 import Play from './pages/Play.jsx'
+import Admin from './pages/Admin.jsx'
 import { AuthProvider, useAuth } from './lib/AuthContext.jsx'
 
 function RequireAuth({ children }) {
@@ -57,6 +58,14 @@ export default function App() {
           }
         />
         <Route path="/o'yin/:pin" element={<Play />} />
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
+          }
+        />
         <Route path="*" element={<Landing />} />
       </Routes>
     </AuthProvider>

@@ -6,7 +6,7 @@ import { fadeUp, stagger, inViewOnce } from '../lib/motion.js'
 
 export default function Characters() {
   return (
-    <section id="qahramonlar" className="relative overflow-hidden bg-white/60 py-20">
+    <section id="qahramonlar" className="relative overflow-hidden bg-surface/60 py-20">
       <NaqshPattern color="#2B3A8C" opacity={0.05} />
 
       <div className="section relative">

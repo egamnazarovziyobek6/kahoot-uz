@@ -8,40 +8,42 @@
   --font-display: 'Baloo 2', 'Nunito', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
 
-  /* Asosiy palitra */
-  --color-cream: #fbf3e4;
-  --color-cream-deep: #f3e6cd;
+  /* Asosiy palitra — to'q, neon-gaming uslub (17-18 yosh auditoriya uchun) */
+  --color-cream: #0b1220;
+  --color-cream-deep: #060a14;
+  --color-surface: #121b31;
+  --color-surface-soft: #1a2540;
 
-  --color-samarkand: #0e7c9d;
-  --color-samarkand-light: #1ea5b8;
-  --color-samarkand-deep: #124a5e;
+  --color-samarkand: #14b8c7;
+  --color-samarkand-light: #33e0e8;
+  --color-samarkand-deep: #0a6b78;
 
-  --color-indigo-uz: #2b3a8c;
-  --color-indigo-deep: #1e2a6b;
+  --color-indigo-uz: #6a5cf5;
+  --color-indigo-deep: #4636c9;
 
   --color-saffron: #f5a623;
   --color-saffron-light: #ffc94d;
 
-  --color-anor: #e24a3b;
-  --color-anor-deep: #b8382c;
+  --color-anor: #ff4d5e;
+  --color-anor-deep: #c22c3d;
 
-  --color-chaman: #1b7a4b;
-  --color-chaman-light: #3aa06a;
+  --color-chaman: #2fd583;
+  --color-chaman-light: #57e6a1;
 
-  --color-ink: #22304a;
-  --color-ink-soft: #4a5a75;
+  --color-ink: #eef2fb;
+  --color-ink-soft: #93a2c3;
 
   /* Javob variantlari ranglari (Kahoot uslubi) */
-  --color-answer-1: #e24a3b;
-  --color-answer-2: #1368ce;
+  --color-answer-1: #ff4d5e;
+  --color-answer-2: #2f7bff;
   --color-answer-3: #f5a623;
-  --color-answer-4: #1b7a4b;
+  --color-answer-4: #2fd583;
 
   --radius-xl: 1.25rem;
   --radius-2xl: 1.75rem;
 
-  --shadow-card: 0 10px 30px -10px rgb(34 48 74 / 0.22);
-  --shadow-pop: 0 18px 40px -12px rgb(34 48 74 / 0.35);
+  --shadow-card: 0 10px 30px -8px rgb(0 0 0 / 0.55);
+  --shadow-pop: 0 18px 44px -10px rgb(0 0 0 / 0.65);
 }
 
 @keyframes blink {
@@ -67,9 +69,11 @@
     color: var(--color-ink);
     background-color: var(--color-cream);
     background-image:
-      radial-gradient(circle at 12% 18%, rgb(30 165 184 / 0.14), transparent 42%),
-      radial-gradient(circle at 88% 8%, rgb(245 166 35 / 0.16), transparent 40%),
-      radial-gradient(circle at 78% 82%, rgb(226 74 59 / 0.1), transparent 45%);
+      radial-gradient(circle at 12% 12%, rgb(51 224 232 / 0.16), transparent 42%),
+      radial-gradient(circle at 88% 6%, rgb(255 77 94 / 0.14), transparent 40%),
+      radial-gradient(circle at 82% 86%, rgb(106 92 245 / 0.16), transparent 45%),
+      radial-gradient(circle at 6% 88%, rgb(245 166 35 / 0.08), transparent 40%);
+    background-attachment: fixed;
     min-height: 100vh;
     overflow-x: hidden;
   }
@@ -123,7 +127,10 @@
   .btn-primary {
     color: #fff;
     background: linear-gradient(180deg, var(--color-anor) 0%, var(--color-anor-deep) 100%);
-    box-shadow: 0 6px 0 0 var(--color-anor-deep), var(--shadow-card);
+    box-shadow:
+      0 6px 0 0 var(--color-anor-deep),
+      0 0 26px -6px rgb(255 77 94 / 0.55),
+      var(--shadow-card);
   }
   .btn-primary:active {
     transform: translateY(4px);
@@ -131,9 +138,12 @@
   }
 
   .btn-samarkand {
-    color: #fff;
+    color: #06232a;
     background: linear-gradient(180deg, var(--color-samarkand-light) 0%, var(--color-samarkand) 100%);
-    box-shadow: 0 6px 0 0 var(--color-samarkand-deep), var(--shadow-card);
+    box-shadow:
+      0 6px 0 0 var(--color-samarkand-deep),
+      0 0 26px -6px rgb(51 224 232 / 0.55),
+      var(--shadow-card);
   }
   .btn-samarkand:active {
     transform: translateY(4px);
@@ -141,21 +151,21 @@
   }
 
   .btn-ghost {
-    border: 2px solid rgb(34 48 74 / 0.14);
-    background: rgb(255 255 255 / 0.7);
+    border: 2px solid rgb(255 255 255 / 0.14);
+    background: rgb(255 255 255 / 0.06);
     backdrop-filter: blur(6px);
     color: var(--color-ink);
   }
   .btn-ghost:hover {
-    border-color: rgb(34 48 74 / 0.3);
+    border-color: rgb(255 255 255 / 0.3);
   }
 
   .card {
     display: flex;
     flex-direction: column;
     border-radius: var(--radius-2xl);
-    border: 1px solid rgb(0 0 0 / 0.05);
-    background: #fff;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background: var(--color-surface);
     padding: 1.5rem;
     box-shadow: var(--shadow-card);
   }
@@ -170,8 +180,8 @@
   .field {
     width: 100%;
     border-radius: 0.9rem;
-    border: 2px solid rgb(34 48 74 / 0.12);
-    background: #fff;
+    border: 2px solid rgb(255 255 255 / 0.1);
+    background: var(--color-surface);
     padding: 0.65rem 0.9rem;
     font-size: 0.95rem;
     color: var(--color-ink);
@@ -182,7 +192,7 @@
     border-color: var(--color-samarkand);
   }
   .field::placeholder {
-    color: rgb(74 90 117 / 0.5);
+    color: rgb(147 162 195 / 0.5);
   }
 
   .chip {
@@ -190,8 +200,8 @@
     align-items: center;
     gap: 0.35rem;
     border-radius: 999px;
-    border: 2px solid rgb(34 48 74 / 0.12);
-    background: #fff;
+    border: 2px solid rgb(255 255 255 / 0.1);
+    background: var(--color-surface);
     padding: 0.3rem 0.75rem;
     font-size: 0.8rem;
     font-weight: 700;
@@ -204,8 +214,8 @@
   }
   .chip[data-active='true'] {
     border-color: var(--color-samarkand);
-    background: color-mix(in srgb, var(--color-samarkand) 12%, #fff);
-    color: var(--color-samarkand-deep);
+    background: color-mix(in srgb, var(--color-samarkand) 20%, var(--color-surface));
+    color: var(--color-samarkand-light);
   }
 
   .section {

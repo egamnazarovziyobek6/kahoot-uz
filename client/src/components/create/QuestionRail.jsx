@@ -15,7 +15,7 @@ function AddMenu({ onAdd }) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full z-20 mb-2 w-full overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]">
+          <div className="absolute bottom-full z-20 mb-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]">
             {Object.entries(QUESTION_TYPES).map(([key, t]) => (
               <button
                 key={key}
@@ -53,8 +53,8 @@ export default function QuestionRail({
   errorsByIndex = [],
 }) {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-black/10 bg-white/70 md:flex">
-      <div className="border-b border-black/10 px-4 py-3">
+    <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-surface/70 md:flex">
+      <div className="border-b border-white/10 px-4 py-3">
         <p className="font-display text-sm font-extrabold text-ink">
           Savollar <span className="text-ink-soft">({questions.length})</span>
         </p>
@@ -74,7 +74,7 @@ export default function QuestionRail({
                 className={`group cursor-pointer rounded-xl border-2 p-2.5 transition-colors ${
                   active
                     ? 'border-samarkand bg-samarkand/8'
-                    : 'border-transparent bg-white hover:border-black/10'
+                    : 'border-transparent bg-surface hover:border-white/10'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -154,7 +154,7 @@ export default function QuestionRail({
         })}
       </ol>
 
-      <div className="border-t border-black/10 p-3">
+      <div className="border-t border-white/10 p-3">
         <AddMenu onAdd={onAdd} />
       </div>
     </aside>
@@ -168,7 +168,7 @@ function RailIcon({ children, onClick, title, danger, disabled }) {
       title={title}
       onClick={onClick}
       disabled={disabled}
-      className={`grid h-6 w-6 place-items-center rounded-md border border-black/10 bg-white text-xs transition-colors disabled:opacity-25 ${
+      className={`grid h-6 w-6 place-items-center rounded-md border border-white/10 bg-surface text-xs transition-colors disabled:opacity-25 ${
         danger ? 'hover:border-anor hover:text-anor' : 'hover:border-samarkand hover:text-samarkand'
       }`}
     >

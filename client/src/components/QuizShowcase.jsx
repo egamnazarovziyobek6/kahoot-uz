@@ -35,7 +35,7 @@ export default function QuizShowcase() {
             key={q.id}
             variants={fadeUp}
             whileHover={{ y: -6 }}
-            className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_10px_30px_-10px_rgba(34,48,74,0.22)]"
+            className="overflow-hidden rounded-2xl border border-white/5 bg-surface shadow-[0_10px_30px_-10px_rgba(34,48,74,0.22)]"
           >
             <div
               className="flex h-28 items-center justify-center text-5xl"

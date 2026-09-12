@@ -34,12 +34,30 @@ function teacherFromToken(token) {
   }
 }
 
+/** Admin deb belgilangan email manzillar ro'yxati (server/.env: ADMIN_EMAILS=a@b.com,c@d.com) */
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean)
+
+export function isAdmin(teacher) {
+  return Boolean(teacher?.email && ADMIN_EMAILS.includes(teacher.email.toLowerCase()))
+}
+
 /** Express middleware — himoyalangan route'lar uchun */
 export function requireAuth(req, res, next) {
   const teacher = teacherFromToken(req.cookies?.[COOKIE_NAME])
   if (!teacher) return res.status(401).json({ error: 'Tizimga kirilmagan' })
   req.teacher = teacher
   next()
+}
+
+/** Faqat ADMIN_EMAILS ro'yxatidagi hisoblar uchun */
+export function requireAdmin(req, res, next) {
+  requireAuth(req, res, () => {
+    if (!isAdmin(req.teacher)) return res.status(403).json({ error: 'Ruxsat yo\'q' })
+    next()
+  })
 }
 
 /** Socket.IO handshake cookie'sidan o'qituvchini aniqlaydi (bo'lmasa null) */
@@ -159,13 +177,14 @@ authRouter.post('/dev-login', (req, res) => {
     return res.status(404).json({ error: 'Topilmadi' })
   }
   const name = String(req.body?.name || 'Sinov o‘qituvchisi').slice(0, 60)
-  const teacher = upsertTeacher({ provider: 'dev', providerId: name.toLowerCase(), name })
+  const email = req.body?.email ? String(req.body.email).slice(0, 200) : null
+  const teacher = upsertTeacher({ provider: 'dev', providerId: name.toLowerCase(), name, email })
   res.cookie(COOKIE_NAME, signTeacher(teacher), COOKIE_OPTIONS)
   res.json({ ok: true, teacher: publicTeacher(teacher) })
 })
 
 authRouter.get('/me', requireAuth, (req, res) => {
-  res.json({ teacher: publicTeacher(req.teacher) })
+  res.json({ teacher: { ...publicTeacher(req.teacher), isAdmin: isAdmin(req.teacher) } })
 })
 
 authRouter.post('/logout', (_req, res) => {

@@ -66,6 +66,17 @@ export function closeRoom(hostId) {
   return null
 }
 
+/** Admin panel uchun — faol xonalarning qisqacha holati */
+export function listRooms() {
+  return [...rooms.values()].map((room) => ({
+    pin: room.pin,
+    teacherId: room.teacherId,
+    status: room.status,
+    playerCount: room.players.size,
+    quizId: room.quizId,
+  }))
+}
+
 export function playerList(room) {
   return [...room.players.values()].map(({ id, name, character, score }) => ({
     id,
