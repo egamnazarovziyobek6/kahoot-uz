@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
+import CameraCapture from '../components/CameraCapture.jsx'
 import { characters } from '../lib/characters.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import { listQuizzes, deleteQuiz, duplicateQuiz } from '../lib/quizStore.js'
@@ -33,9 +34,10 @@ function fmtDate(ts) {
 
 export default function MyQuizzes() {
   const navigate = useNavigate()
-  const { teacher, logout } = useAuth()
+  const { teacher, logout, updateAvatar } = useAuth()
   const [quizzes, setQuizzes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showCamera, setShowCamera] = useState(false)
 
   useEffect(() => {
     refresh()
@@ -62,10 +64,27 @@ export default function MyQuizzes() {
           </Link>
           <div className="flex items-center gap-3">
             {teacher && (
-              <span className="hidden text-sm font-bold text-ink-soft sm:inline">
-                👋 {teacher.name}
-              </span>
+              <button
+                type="button"
+                onClick={() => setShowCamera(true)}
+                title="Profil rasmini yangilash"
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-surface py-1 pl-1 pr-3 hover:border-samarkand/50"
+              >
+                {teacher.avatar ? (
+                  <img src={teacher.avatar} alt="" className="h-7 w-7 rounded-full object-cover" />
+                ) : (
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-samarkand text-xs font-extrabold text-white">
+                    {teacher.name?.[0]?.toUpperCase() || '?'}
+                  </span>
+                )}
+                <span className="hidden text-sm font-bold text-ink-soft sm:inline">
+                  {teacher.name}
+                </span>
+              </button>
             )}
+            <Link to="/forum" className="btn-ghost !px-3 !py-2 text-sm">
+              💬 Forum
+            </Link>
             {teacher?.isAdmin && (
               <Link to="/admin" className="btn-ghost !px-3 !py-2 text-sm">
                 🛠 Admin
@@ -198,6 +217,13 @@ export default function MyQuizzes() {
       </main>
 
       <Footer />
+
+      {showCamera && (
+        <CameraCapture
+          onCapture={(dataUrl) => updateAvatar(dataUrl)}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
     </div>
   )
 }

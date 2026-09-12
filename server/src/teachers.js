@@ -13,6 +13,8 @@ const updateStmt = db.prepare(
   'UPDATE teachers SET name = @name, email = @email, avatar = @avatar WHERE id = @id',
 )
 const byIdStmt = db.prepare('SELECT * FROM teachers WHERE id = ?')
+const updateAvatarStmt = db.prepare('UPDATE teachers SET avatar = @avatar WHERE id = @id')
+const setVerifiedStmt = db.prepare('UPDATE teachers SET is_verified = @is_verified WHERE id = @id')
 const insertQuizStmt = db.prepare(
   'INSERT INTO quizzes (id, teacher_id, data, updated_at) VALUES (?, ?, ?, ?)',
 )
@@ -51,8 +53,27 @@ export function getTeacherById(id) {
   return byIdStmt.get(id)
 }
 
+/** O'qituvchi kamera bilan olgan selfi/profil rasmini yangilaydi (data URL sifatida saqlanadi) */
+export function updateAvatar(id, avatar) {
+  updateAvatarStmt.run({ id, avatar })
+  return byIdStmt.get(id)
+}
+
+/** Admin tomonidan tasdiqlash (X/Twitter'dagi ko'k belgiga o'xshash) */
+export function setVerified(id, verified) {
+  setVerifiedStmt.run({ id, is_verified: verified ? 1 : 0 })
+  return byIdStmt.get(id)
+}
+
 /** Klientga yuboriladigan xavfsiz maydonlar */
 export function publicTeacher(t) {
   if (!t) return null
-  return { id: t.id, provider: t.provider, name: t.name, email: t.email, avatar: t.avatar }
+  return {
+    id: t.id,
+    provider: t.provider,
+    name: t.name,
+    email: t.email,
+    avatar: t.avatar,
+    isVerified: Boolean(t.is_verified),
+  }
 }

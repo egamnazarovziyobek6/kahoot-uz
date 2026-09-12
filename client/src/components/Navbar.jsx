@@ -33,6 +33,11 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          <li>
+            <Link to="/forum" className="font-semibold text-ink-soft transition-colors hover:text-samarkand">
+              💬 Forum
+            </Link>
+          </li>
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -74,6 +79,15 @@ export default function Navbar() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/forum"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-xl px-3 py-2.5 font-semibold text-ink-soft hover:bg-surface"
+                >
+                  💬 Forum
+                </Link>
+              </li>
               <li className="mt-2 flex gap-3 px-1 md:hidden">
                 <a href="#join" onClick={() => setOpen(false)} className="btn-ghost flex-1 !py-2 text-sm">
                   O‘yinga kirish

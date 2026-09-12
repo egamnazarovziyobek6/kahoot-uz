@@ -6,6 +6,7 @@ const AuthContext = createContext({
   loading: true,
   refresh: () => {},
   logout: () => {},
+  updateAvatar: () => {},
 })
 
 export function AuthProvider({ children }) {
@@ -35,8 +36,13 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function updateAvatar(dataUrl) {
+    const { teacher } = await api.put('/auth/avatar', { avatar: dataUrl })
+    setTeacher(teacher)
+  }
+
   return (
-    <AuthContext.Provider value={{ teacher, loading, refresh, logout }}>
+    <AuthContext.Provider value={{ teacher, loading, refresh, logout, updateAvatar }}>
       {children}
     </AuthContext.Provider>
   )

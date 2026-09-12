@@ -8,6 +8,7 @@ import { Server } from 'socket.io'
 import { authRouter, socketTeacher } from './auth.js'
 import { adminRouter } from './admin.js'
 import { aiRouter } from './ai/router.js'
+import { forumRouter } from './forum.js'
 import { CLIENT_ORIGINS } from './clientOrigins.js'
 import { db } from './db.js'
 import { checkAnswer, computePoints, publicQuestion } from './gameLogic.js'
@@ -34,6 +35,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/quizzes', quizzesRouter)
 app.use('/api/ai', aiRouter)
 app.use('/api/admin', adminRouter)
+app.use('/api/forum', forumRouter)
 
 const getOwnedQuizStmt = db.prepare('SELECT data FROM quizzes WHERE id = ? AND teacher_id = ?')
 

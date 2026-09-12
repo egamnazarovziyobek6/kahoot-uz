@@ -3,10 +3,12 @@
 import { Router } from 'express'
 import { db } from './db.js'
 import { requireAdmin } from './auth.js'
+import { setVerified } from './teachers.js'
 import { listRooms } from './rooms.js'
+import { deletePost } from './forum.js'
 
 const teachersStmt = db.prepare(`
-  SELECT t.id, t.provider, t.name, t.email, t.avatar, t.created_at,
+  SELECT t.id, t.provider, t.name, t.email, t.avatar, t.created_at, t.is_verified,
     (SELECT COUNT(*) FROM quizzes q WHERE q.teacher_id = t.id) AS quiz_count
   FROM teachers t
   ORDER BY t.created_at DESC
@@ -45,12 +47,19 @@ adminRouter.get('/teachers', (_req, res) => {
       avatar: t.avatar,
       createdAt: t.created_at,
       quizCount: t.quiz_count,
+      isVerified: Boolean(t.is_verified),
     })),
   )
 })
 
 adminRouter.delete('/teachers/:id', (req, res) => {
   deleteTeacherStmt.run(req.params.id)
+  res.json({ ok: true })
+})
+
+adminRouter.put('/teachers/:id/verify', (req, res) => {
+  const teacher = setVerified(req.params.id, Boolean(req.body?.verified))
+  if (!teacher) return res.status(404).json({ error: 'Topilmadi' })
   res.json({ ok: true })
 })
 
@@ -77,4 +86,9 @@ adminRouter.delete('/quizzes/:id', (req, res) => {
 
 adminRouter.get('/rooms', (_req, res) => {
   res.json(listRooms())
+})
+
+adminRouter.delete('/forum/posts/:id', (req, res) => {
+  deletePost(req.params.id)
+  res.json({ ok: true })
 })
