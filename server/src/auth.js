@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { PRIMARY_CLIENT_ORIGIN } from './clientOrigins.js'
-import { getTeacherById, publicTeacher, upsertTeacher } from './teachers.js'
+import { getTeacherById, publicTeacher, updateAvatar, upsertTeacher } from './teachers.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-almashtiring'
 const COOKIE_NAME = 'kahoot_uz_token'
@@ -58,6 +58,12 @@ export function requireAdmin(req, res, next) {
     if (!isAdmin(req.teacher)) return res.status(403).json({ error: 'Ruxsat yo\'q' })
     next()
   })
+}
+
+/** Cookie bo'lsa o'qituvchini biriktiradi, bo'lmasa ham davom etadi (forum: mehmon yoki o'qituvchi) */
+export function optionalAuth(req, _res, next) {
+  req.teacher = teacherFromToken(req.cookies?.[COOKIE_NAME])
+  next()
 }
 
 /** Socket.IO handshake cookie'sidan o'qituvchini aniqlaydi (bo'lmasa null) */
@@ -185,6 +191,17 @@ authRouter.post('/dev-login', (req, res) => {
 
 authRouter.get('/me', requireAuth, (req, res) => {
   res.json({ teacher: { ...publicTeacher(req.teacher), isAdmin: isAdmin(req.teacher) } })
+})
+
+// Foydalanuvchi o'zi kamera bilan olgan selfini profil rasmi sifatida saqlaydi.
+// Faqat o'zining hisobiga, faqat aniq rozilik bilan (tugma bosilganda) chaqiriladi.
+authRouter.put('/avatar', requireAuth, (req, res) => {
+  const avatar = req.body?.avatar
+  if (typeof avatar !== 'string' || !avatar.startsWith('data:image/') || avatar.length > 1_500_000) {
+    return res.status(400).json({ error: "Rasm noto'g'ri formatda yoki juda katta" })
+  }
+  const teacher = updateAvatar(req.teacher.id, avatar)
+  res.json({ teacher: { ...publicTeacher(teacher), isAdmin: isAdmin(teacher) } })
 })
 
 authRouter.post('/logout', (_req, res) => {

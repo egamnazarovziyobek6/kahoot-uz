@@ -33,4 +33,36 @@ db.exec(`
     updated_at INTEGER NOT NULL
   );
   CREATE INDEX IF NOT EXISTS idx_quizzes_teacher ON quizzes(teacher_id);
+
+  CREATE TABLE IF NOT EXISTS forum_posts (
+    id TEXT PRIMARY KEY,
+    author_type TEXT NOT NULL, -- 'teacher' | 'guest'
+    author_id TEXT,            -- teacher_id agar author_type='teacher' bo'lsa
+    author_name TEXT NOT NULL,
+    author_avatar TEXT,
+    content TEXT NOT NULL,
+    repost_of TEXT REFERENCES forum_posts(id),
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_forum_posts_created ON forum_posts(created_at DESC);
+
+  CREATE TABLE IF NOT EXISTS forum_reactions (
+    post_id TEXT NOT NULL,
+    liker_key TEXT NOT NULL, -- teacher_id yoki mehmon uchun brauzerda saqlangan tasodifiy kalit
+    emoji TEXT NOT NULL,
+    PRIMARY KEY (post_id, liker_key)
+  );
 `)
+
+// Eski bazalarda mavjud bo'lmagan ustunlarni qo'shib qo'yamiz (migratsiya)
+const teacherColumns = db.prepare('PRAGMA table_info(teachers)').all().map((c) => c.name)
+if (!teacherColumns.includes('is_verified')) {
+  db.exec('ALTER TABLE teachers ADD COLUMN is_verified INTEGER NOT NULL DEFAULT 0')
+}
+
+const forumPostColumns = db.prepare('PRAGMA table_info(forum_posts)').all().map((c) => c.name)
+if (!forumPostColumns.includes('repost_of')) {
+  db.exec('ALTER TABLE forum_posts ADD COLUMN repost_of TEXT REFERENCES forum_posts(id)')
+}
+
+db.exec('DROP TABLE IF EXISTS forum_likes')
