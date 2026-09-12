@@ -30,7 +30,7 @@ export default function Login() {
 
   // Telegram Login Widget — faqat bot username sozlangan bo'lsa ko'rsatiladi
   useEffect(() => {
-    if (!telegramEnabled || !telegramBoxRef.current) return
+    if (!config || !telegramEnabled || !telegramBoxRef.current) return
 
     window.onTelegramAuth = async (user) => {
       setBusy(true)
