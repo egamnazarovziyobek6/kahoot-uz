@@ -36,8 +36,8 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function updateAvatar(dataUrl) {
-    const { teacher } = await api.put('/auth/avatar', { avatar: dataUrl })
+  async function updateAvatar(dataUrl, videoDataUrl) {
+    const { teacher } = await api.put('/auth/avatar', { avatar: dataUrl, video: videoDataUrl })
     setTeacher(teacher)
   }
 

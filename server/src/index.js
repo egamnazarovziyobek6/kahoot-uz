@@ -27,7 +27,7 @@ const PORT = process.env.PORT || 4000
 const app = express()
 app.use(cors({ origin: CLIENT_ORIGINS, credentials: true }))
 app.use(cookieParser())
-app.use(express.json({ limit: '2mb' }))
+app.use(express.json({ limit: '8mb' }))
 app.use(passport.initialize())
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'kahoot-uz-server' }))
