@@ -15,6 +15,9 @@ const updateStmt = db.prepare(
 const byIdStmt = db.prepare('SELECT * FROM teachers WHERE id = ?')
 const updateAvatarStmt = db.prepare('UPDATE teachers SET avatar = @avatar WHERE id = @id')
 const setVerifiedStmt = db.prepare('UPDATE teachers SET is_verified = @is_verified WHERE id = @id')
+const setBlockedStmt = db.prepare('UPDATE teachers SET is_blocked = @is_blocked WHERE id = @id')
+const setAdminFlagStmt = db.prepare('UPDATE teachers SET is_admin = @is_admin WHERE id = @id')
+const updateFieldsStmt = db.prepare('UPDATE teachers SET name = @name, email = @email WHERE id = @id')
 const insertQuizStmt = db.prepare(
   'INSERT INTO quizzes (id, teacher_id, data, updated_at) VALUES (?, ?, ?, ?)',
 )
@@ -65,6 +68,40 @@ export function setVerified(id, verified) {
   return byIdStmt.get(id)
 }
 
+/** Admin tomonidan bloklash — hisob o'chirilmaydi, faqat kirish va yangi o'yin ochish taqiqlanadi */
+export function setBlocked(id, blocked) {
+  setBlockedStmt.run({ id, is_blocked: blocked ? 1 : 0 })
+  return byIdStmt.get(id)
+}
+
+/** Boshqa o'qituvchini admin qilib tayinlash/bekor qilish */
+export function setAdminFlag(id, isAdminFlag) {
+  setAdminFlagStmt.run({ id, is_admin: isAdminFlag ? 1 : 0 })
+  return byIdStmt.get(id)
+}
+
+/** Admin tomonidan ism/email'ni to'g'ridan-to'g'ri tahrirlash */
+export function updateTeacherFields(id, { name, email }) {
+  const existing = byIdStmt.get(id)
+  if (!existing) return null
+  updateFieldsStmt.run({
+    id,
+    name: name?.trim() || existing.name,
+    email: email?.trim() || null,
+  })
+  return byIdStmt.get(id)
+}
+
+export function listQuizzesByTeacher(id) {
+  return db
+    .prepare('SELECT id, data, updated_at FROM quizzes WHERE teacher_id = ? ORDER BY updated_at DESC')
+    .all(id)
+    .map((row) => {
+      const quiz = JSON.parse(row.data)
+      return { id: row.id, title: quiz.title, questionCount: quiz.questions?.length ?? 0, updatedAt: row.updated_at }
+    })
+}
+
 /** Klientga yuboriladigan xavfsiz maydonlar */
 export function publicTeacher(t) {
   if (!t) return null
@@ -75,5 +112,6 @@ export function publicTeacher(t) {
     email: t.email,
     avatar: t.avatar,
     isVerified: Boolean(t.is_verified),
+    isBlocked: Boolean(t.is_blocked),
   }
 }

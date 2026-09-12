@@ -6,6 +6,7 @@ import MyQuizzes from './pages/MyQuizzes.jsx'
 import Host from './pages/Host.jsx'
 import Play from './pages/Play.jsx'
 import Admin from './pages/Admin.jsx'
+import AdminTeacherDetail from './pages/AdminTeacherDetail.jsx'
 import Forum from './pages/Forum.jsx'
 import { AuthProvider, useAuth } from './lib/AuthContext.jsx'
 
@@ -65,6 +66,14 @@ export default function App() {
           element={
             <RequireAuth>
               <Admin />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin/teachers/:id"
+          element={
+            <RequireAuth>
+              <AdminTeacherDetail />
             </RequireAuth>
           }
         />
