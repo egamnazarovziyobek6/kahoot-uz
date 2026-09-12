@@ -108,6 +108,9 @@ authRouter.get('/config', (_req, res) => {
     googleEnabled,
     telegramEnabled,
     telegramBotUsername: process.env.TELEGRAM_BOT_USERNAME || '',
+    // Bot token'ning `<id>:<hash>` formatidagi ochiq (maxfiy bo'lmagan) qismi —
+    // Telegram Login Widget'ning Telegram.Login.auth() JS API'si shuni talab qiladi.
+    telegramBotId: (process.env.TELEGRAM_BOT_TOKEN || '').split(':')[0] || '',
     devLoginEnabled: process.env.ALLOW_DEV_LOGIN === 'true',
   })
 })

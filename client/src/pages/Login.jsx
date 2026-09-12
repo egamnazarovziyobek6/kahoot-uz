@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Mascot from '../components/mascots/Mascot.jsx'
@@ -15,7 +15,6 @@ export default function Login() {
   const [devName, setDevName] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
-  const telegramBoxRef = useRef(null)
 
   useEffect(() => {
     api.get('/auth/config').then(setConfig).catch(() => setConfig({ googleEnabled: true, telegramEnabled: true }))
@@ -28,35 +27,45 @@ export default function Login() {
   const googleEnabled = config ? config.googleEnabled !== false : true
   const telegramEnabled = config ? config.telegramEnabled !== false : true
 
-  // Telegram Login Widget — faqat bot username sozlangan bo'lsa ko'rsatiladi
+  // Telegram Login Widget skripti — logotip tugma o'rniga Telegram.Login.auth()
+  // JS API'sini chaqirish uchun faqat fon vazifasida yuklab qo'yiladi (ko'rinmaydi).
   useEffect(() => {
-    if (!config || !telegramEnabled || !telegramBoxRef.current) return
-
-    window.onTelegramAuth = async (user) => {
-      setBusy(true)
-      setError(null)
-      try {
-        await api.post('/auth/telegram', user)
-        await refresh()
-        navigate('/testlarim')
-      } catch (e) {
-        setError(e.message)
-      } finally {
-        setBusy(false)
-      }
-    }
-
+    if (!telegramEnabled) return
     const script = document.createElement('script')
     script.src = 'https://telegram.org/js/telegram-widget.js?22'
     script.async = true
-    script.setAttribute('data-telegram-login', config.telegramBotUsername)
-    script.setAttribute('data-size', 'large')
-    script.setAttribute('data-radius', '14')
-    script.setAttribute('data-onauth', 'onTelegramAuth(user)')
-    script.setAttribute('data-request-access', 'write')
-    telegramBoxRef.current.innerHTML = ''
-    telegramBoxRef.current.appendChild(script)
-  }, [config, navigate, refresh])
+    document.body.appendChild(script)
+    return () => script.remove()
+  }, [telegramEnabled])
+
+  async function handleTelegramAuth(user) {
+    setBusy(true)
+    setError(null)
+    try {
+      await api.post('/auth/telegram', user)
+      await refresh()
+      navigate('/testlarim')
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  function telegramLogin() {
+    if (!config?.telegramBotId || !window.Telegram?.Login) {
+      setError('Telegram hali tayyor emas, biroz kuting va qayta urinib ko‘ring')
+      return
+    }
+    setError(null)
+    window.Telegram.Login.auth(
+      { bot_id: config.telegramBotId, request_access: 'write' },
+      (user) => {
+        if (!user) return
+        handleTelegramAuth(user)
+      },
+    )
+  }
 
   async function devLogin() {
     setBusy(true)
@@ -99,14 +108,16 @@ export default function Login() {
           kiring
         </p>
 
-        <div className="mt-6 flex flex-col gap-3">
+        <div className="mt-6 flex items-center justify-center gap-5">
           {googleEnabled && (
             <motion.a
               variants={fadeUp}
               href={`${API_ORIGIN}/api/auth/google`}
-              className="btn-primary w-full justify-center flex items-center gap-2.5"
+              aria-label="Google bilan kirish"
+              title="Google bilan kirish"
+              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-black/10 bg-white shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0"
             >
-              <svg className="h-5 w-5 shrink-0 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
+              <svg className="h-8 w-8" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -124,18 +135,31 @@ export default function Login() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span>Google bilan kirish</span>
             </motion.a>
           )}
 
           {telegramEnabled && (
-            <div
-              ref={telegramBoxRef}
-              className="flex justify-center transition-transform"
-              style={{ transform: 'scale(0.9)', transformOrigin: 'center' }}
-            />
+            <motion.button
+              variants={fadeUp}
+              type="button"
+              onClick={telegramLogin}
+              disabled={busy}
+              aria-label="Telegram bilan kirish"
+              title="Telegram bilan kirish"
+              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-black/10 bg-white shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
+            >
+              <svg className="h-9 w-9" viewBox="0 0 240 240">
+                <circle cx="120" cy="120" r="120" fill="#29A9EB" />
+                <path
+                  fill="#fff"
+                  d="M174.6 68.5 152 178.3c-1.7 7.6-6.2 9.5-12.6 5.9l-34.8-25.7-16.8 16.2c-1.9 1.9-3.4 3.4-7 3.4l2.5-35.6 64.8-58.6c2.8-2.5-.6-3.9-4.4-1.4L69 138.3l-34.9-10.9c-7.6-2.4-7.7-7.6 1.6-11.2l136.4-52.6c6.3-2.3 11.8 1.5 9.5 10.9z"
+                />
+              </svg>
+            </motion.button>
           )}
+        </div>
 
+        <div className="mt-4 flex flex-col gap-3">
           {config?.devLoginEnabled && (
             <div className="mt-2 rounded-2xl border-2 border-dashed border-black/10 p-3">
               <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-ink-soft">
