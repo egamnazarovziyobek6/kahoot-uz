@@ -87,7 +87,7 @@ export default function Login() {
         variants={popIn}
         initial="hidden"
         animate="show"
-        className="w-full max-w-sm rounded-3xl border border-black/5 bg-white p-7 shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
+        className="w-full max-w-sm rounded-3xl border border-white/5 bg-surface p-7 shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
       >
         <Link to="/" className="mb-5 flex items-center gap-2.5">
           <img src="/logo.svg" alt="" width={34} height={34} />
@@ -115,7 +115,7 @@ export default function Login() {
               href={`${API_ORIGIN}/api/auth/google`}
               aria-label="Google bilan kirish"
               title="Google bilan kirish"
-              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-black/10 bg-white shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0"
+              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-white/10 bg-surface shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0"
             >
               <svg className="h-8 w-8" viewBox="0 0 24 24">
                 <path
@@ -146,7 +146,7 @@ export default function Login() {
               disabled={busy}
               aria-label="Telegram bilan kirish"
               title="Telegram bilan kirish"
-              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-black/10 bg-white shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
+              className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-white/10 bg-surface shadow-card transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
             >
               <svg className="h-9 w-9" viewBox="0 0 240 240">
                 <circle cx="120" cy="120" r="120" fill="#29A9EB" />
@@ -161,7 +161,7 @@ export default function Login() {
 
         <div className="mt-4 flex flex-col gap-3">
           {config?.devLoginEnabled && (
-            <div className="mt-2 rounded-2xl border-2 border-dashed border-black/10 p-3">
+            <div className="mt-2 rounded-2xl border-2 border-dashed border-white/10 p-3">
               <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-ink-soft">
                 Faqat sinov uchun (lokal)
               </p>

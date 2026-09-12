@@ -19,6 +19,7 @@ export default function Mascot({
   pose = 'idle',
   float = false,
   className = '',
+  style: styleProp,
   ...rest
 }) {
   const body = color ?? character?.color ?? '#E24A3B'
@@ -37,6 +38,7 @@ export default function Mascot({
       role="img"
       aria-label={character?.name ? `${character.name} qahramoni` : 'Kahoot UZ qahramoni'}
       {...rest}
+      style={{ filter: `drop-shadow(0 0 14px ${body}55)`, ...styleProp }}
     >
       {/* soya */}
       <ellipse cx="100" cy="222" rx="58" ry="10" fill="#22304A" opacity="0.14" />

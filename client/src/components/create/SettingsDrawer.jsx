@@ -46,12 +46,12 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 320, damping: 34 }}
           >
-            <div className="flex items-center justify-between border-b border-black/10 px-5 py-4">
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <h2 className="font-display text-lg font-extrabold text-ink">Test sozlamalari</h2>
               <button
                 type="button"
                 onClick={onClose}
-                className="grid h-9 w-9 place-items-center rounded-xl border-2 border-black/10 bg-white"
+                className="grid h-9 w-9 place-items-center rounded-xl border-2 border-white/10 bg-surface"
               >
                 ✕
               </button>
@@ -139,7 +139,7 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
                     <img
                       src={quiz.cover}
                       alt="Muqova"
-                      className="h-36 w-full rounded-xl border border-black/10 object-cover"
+                      className="h-36 w-full rounded-xl border border-white/10 object-cover"
                     />
                     <button
                       type="button"
@@ -150,7 +150,7 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
                     </button>
                   </div>
                 ) : (
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-black/15 py-6 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/15 py-6 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
                     🖼️ Rasm tanlash
                     <input type="file" accept="image/*" onChange={handleCover} className="hidden" />
                   </label>
@@ -179,7 +179,7 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
               </div>
             </div>
 
-            <div className="border-t border-black/10 p-4">
+            <div className="border-t border-white/10 p-4">
               <button type="button" onClick={onClose} className="btn-samarkand w-full">
                 Tayyor
               </button>

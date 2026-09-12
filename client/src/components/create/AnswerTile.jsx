@@ -18,8 +18,8 @@ export default function AnswerTile({
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-2xl border-2 bg-white p-3 transition-colors ${
-        answer.correct ? 'border-chaman bg-chaman/5' : 'border-black/10'
+      className={`flex items-center gap-3 rounded-2xl border-2 bg-surface p-3 transition-colors ${
+        answer.correct ? 'border-chaman bg-chaman/5' : 'border-white/10'
       }`}
     >
       <span
@@ -50,7 +50,7 @@ export default function AnswerTile({
         } ${
           answer.correct
             ? 'border-chaman bg-chaman text-white'
-            : 'border-black/20 bg-white text-transparent hover:border-chaman'
+            : 'border-white/20 bg-surface text-transparent hover:border-chaman'
         }`}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">

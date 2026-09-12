@@ -35,7 +35,7 @@ function PreviewInner({ quiz, startIndex, onClose }) {
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <div className="rounded-2xl bg-white p-8 text-ink-soft">Savol yo‘q</div>
+        <div className="rounded-2xl bg-surface p-8 text-ink-soft">Savol yo‘q</div>
       </motion.div>
     )
   }
@@ -121,7 +121,7 @@ function PreviewInner({ quiz, startIndex, onClose }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-black/10 px-5 py-3">
+        <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
           <button
             type="button"
             onClick={() => go(-1)}

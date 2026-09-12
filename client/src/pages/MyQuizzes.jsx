@@ -52,7 +52,7 @@ export default function MyQuizzes() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-black/5 bg-cream/85 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/5 bg-cream/85 backdrop-blur">
         <div className="section flex h-16 items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/logo.svg" alt="" width={36} height={36} />
@@ -65,6 +65,11 @@ export default function MyQuizzes() {
               <span className="hidden text-sm font-bold text-ink-soft sm:inline">
                 👋 {teacher.name}
               </span>
+            )}
+            {teacher?.isAdmin && (
+              <Link to="/admin" className="btn-ghost !px-3 !py-2 text-sm">
+                🛠 Admin
+              </Link>
             )}
             <Link to="/yaratish" className="btn-primary !px-4 !py-2 text-sm">
               + Yangi test
@@ -91,7 +96,7 @@ export default function MyQuizzes() {
         {loading ? (
           <p className="mt-12 text-center text-ink-soft">Yuklanmoqda…</p>
         ) : quizzes.length === 0 ? (
-          <div className="mt-12 flex flex-col items-center rounded-2xl border-2 border-dashed border-black/10 py-16 text-center">
+          <div className="mt-12 flex flex-col items-center rounded-2xl border-2 border-dashed border-white/10 py-16 text-center">
             <Mascot character={characters[2]} size={140} pose="wave" />
             <p className="mt-4 font-display text-xl font-extrabold text-ink">
               Hali test yo‘q
@@ -108,7 +113,7 @@ export default function MyQuizzes() {
               return (
                 <article
                   key={q.id}
-                  className="flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_10px_30px_-10px_rgba(34,48,74,0.22)]"
+                  className="flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-surface shadow-[0_10px_30px_-10px_rgba(34,48,74,0.22)]"
                 >
                   <div
                     className="flex h-28 items-center justify-center bg-cover bg-center"
@@ -145,7 +150,7 @@ export default function MyQuizzes() {
                       )}
                     </div>
 
-                    <div className="mt-4 flex flex-wrap gap-2 border-t border-black/5 pt-3">
+                    <div className="mt-4 flex flex-wrap gap-2 border-t border-white/5 pt-3">
                       <button
                         type="button"
                         disabled={!v.ok}

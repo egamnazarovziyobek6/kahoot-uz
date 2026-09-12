@@ -29,7 +29,7 @@ export default function JoinPin() {
       id="join"
       onSubmit={onSubmit}
       animate={shake}
-      className="w-full max-w-sm rounded-2xl border border-black/5 bg-white p-6 shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
+      className="w-full max-w-sm rounded-2xl border border-white/5 bg-surface p-6 shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
     >
       <div className="mb-1 flex items-center gap-2">
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-samarkand/12 text-lg">🎮</span>
@@ -47,7 +47,7 @@ export default function JoinPin() {
         placeholder="123 456"
         value={pin}
         onChange={onChange}
-        className="w-full rounded-xl border-2 border-black/10 bg-cream/60 px-4 py-3 text-center font-display text-2xl font-extrabold tracking-[0.3em] text-ink outline-none transition-colors placeholder:text-ink-soft/40 focus:border-samarkand"
+        className="w-full rounded-xl border-2 border-white/10 bg-cream/60 px-4 py-3 text-center font-display text-2xl font-extrabold tracking-[0.3em] text-ink outline-none transition-colors placeholder:text-ink-soft/40 focus:border-samarkand"
       />
 
       {msg && (

@@ -6,6 +6,7 @@ import express from 'express'
 import passport from 'passport'
 import { Server } from 'socket.io'
 import { authRouter, socketTeacher } from './auth.js'
+import { adminRouter } from './admin.js'
 import { aiRouter } from './ai/router.js'
 import { CLIENT_ORIGINS } from './clientOrigins.js'
 import { db } from './db.js'
@@ -32,6 +33,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'kahoot-uz-s
 app.use('/api/auth', authRouter)
 app.use('/api/quizzes', quizzesRouter)
 app.use('/api/ai', aiRouter)
+app.use('/api/admin', adminRouter)
 
 const getOwnedQuizStmt = db.prepare('SELECT data FROM quizzes WHERE id = ? AND teacher_id = ?')
 
