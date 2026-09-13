@@ -3,14 +3,13 @@
 // VITE_API_URL orqali to'liq manzilga ulanadi (auth cookie withCredentials bilan boradi).
 
 import { io } from 'socket.io-client'
-
-const API_ORIGIN = import.meta.env.VITE_API_URL || undefined
+import { API_ORIGIN } from './api.js'
 
 let socket = null
 
 export function getSocket() {
   if (!socket) {
-    socket = io(API_ORIGIN, { withCredentials: true, autoConnect: true })
+    socket = io(API_ORIGIN || undefined, { withCredentials: true, autoConnect: true })
   }
   return socket
 }
