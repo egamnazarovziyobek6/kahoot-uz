@@ -214,7 +214,7 @@ export default function Forum() {
       <header className="sticky top-0 z-40 border-b border-white/5 bg-cream/85 backdrop-blur">
         <div className="section flex h-16 items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5">
-            <img src="/logo.svg" alt="" width={36} height={36} />
+            <img src="/logo.svg?v=2" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
               Kahoot <span className="text-samarkand">UZ</span>
             </span>

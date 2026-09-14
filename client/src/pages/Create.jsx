@@ -88,7 +88,9 @@ function reducer(state, action) {
     }
 
     case 'addGeneratedQuestions': {
-      const drafts = action.drafts.map(questionFromDraft)
+      const drafts = action.drafts
+        .filter((d) => (d?.text || '').trim())
+        .map(questionFromDraft)
       if (!drafts.length) return state
       return {
         quiz: { ...quiz, questions: [...quiz.questions, ...drafts] },
@@ -208,6 +210,7 @@ export default function Create() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [generateOpen, setGenerateOpen] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
+  const [railOpen, setRailOpen] = useState(false)
   const firstRun = useRef(true)
   const isNew = useRef(false)
 
@@ -281,7 +284,7 @@ export default function Create() {
   return (
     <div className="flex h-screen flex-col bg-cream">
       {/* Yuqori panel */}
-      <header className="flex items-center gap-3 border-b border-white/10 bg-surface/80 px-3 py-2.5 backdrop-blur">
+      <header className="flex items-center gap-3 overflow-x-auto border-b border-white/10 bg-surface/80 px-3 py-2.5 backdrop-blur">
         <Link
           to="/testlarim"
           className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border-2 border-white/10 bg-surface"
@@ -289,6 +292,14 @@ export default function Create() {
         >
           ←
         </Link>
+
+        <button
+          type="button"
+          onClick={() => setRailOpen(true)}
+          className="grid h-9 shrink-0 place-items-center rounded-xl border-2 border-white/10 bg-surface px-3 text-xs font-extrabold text-ink md:hidden"
+        >
+          Savollar ({quiz.questions.length})
+        </button>
 
         <input
           value={quiz.title}
@@ -338,6 +349,8 @@ export default function Create() {
           onDelete={(qid) => dispatch({ type: 'deleteQuestion', id: qid })}
           onMove={(qid, dir) => dispatch({ type: 'move', id: qid, dir })}
           errorsByIndex={validation.questions}
+          open={railOpen}
+          onClose={() => setRailOpen(false)}
         />
 
         <main className="flex-1 overflow-y-auto">

@@ -19,7 +19,7 @@ export default function Footer() {
       <div className="section grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
-            <img src="/logo.svg" alt="" width={34} height={34} />
+            <img src="/logo.svg?v=2" alt="" width={34} height={34} />
             <span className="font-display text-lg font-extrabold text-ink">
               Kahoot <span className="text-samarkand">UZ</span>
             </span>

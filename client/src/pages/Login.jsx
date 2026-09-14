@@ -96,7 +96,7 @@ export default function Login() {
         className="w-full max-w-sm rounded-3xl border border-white/5 bg-surface p-7 shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
       >
         <Link to="/" className="mb-5 flex items-center gap-2.5">
-          <img src="/logo.svg" alt="" width={34} height={34} />
+          <img src="/logo.svg?v=2" alt="" width={34} height={34} />
           <span className="font-display text-lg font-extrabold text-ink">
             Kahoot <span className="text-samarkand">UZ</span>
           </span>

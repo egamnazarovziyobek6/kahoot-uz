@@ -16,7 +16,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-white/5 bg-cream/80 backdrop-blur-md">
       <nav className="section flex h-16 items-center justify-between gap-4">
         <a href="#top" className="flex items-center gap-2.5">
-          <img src="/logo.svg" alt="" width={38} height={38} className="drop-shadow-sm" />
+          <img src="/logo.svg?v=2" alt="" width={38} height={38} className="drop-shadow-sm" />
           <span className="font-display text-xl font-extrabold tracking-tight text-ink">
             Kahoot <span className="text-samarkand">UZ</span>
           </span>

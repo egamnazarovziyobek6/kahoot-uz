@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
+import { fadeUp } from '../../lib/motion.js'
 import AutoTextarea from './AutoTextarea.jsx'
 import AnswerTile from './AnswerTile.jsx'
 import {
@@ -69,7 +71,12 @@ export default function QuestionEditor({
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6">
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      animate="show"
+      className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6"
+    >
       {/* Mobil savol navigatsiyasi */}
       <div className="mb-4 flex items-center justify-between md:hidden">
         <button
@@ -303,6 +310,6 @@ export default function QuestionEditor({
           ))}
         </ul>
       )}
-    </div>
+    </motion.div>
   )
 }

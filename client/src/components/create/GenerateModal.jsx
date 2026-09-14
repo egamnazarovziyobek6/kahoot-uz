@@ -24,10 +24,11 @@ export default function GenerateModal({ open, onClose, onInsert }) {
     setBusy(true)
     setError(null)
     try {
+      const safeCount = Math.min(15, Math.max(1, Number(count) || 5))
       const { questions } = await api.post('/ai/generate-questions', {
         topic: topic.trim(),
         level,
-        count,
+        count: safeCount,
         types,
       })
       onInsert(questions)
@@ -95,10 +96,23 @@ export default function GenerateModal({ open, onClose, onInsert }) {
                 <span className="mb-1.5 block text-sm font-bold text-ink">Savollar soni</span>
                 <input
                   type="number"
+                  inputMode="numeric"
                   min={1}
                   max={15}
                   value={count}
-                  onChange={(e) => setCount(Number(e.target.value))}
+                  onChange={(e) => {
+                    const raw = e.target.value
+                    if (raw === '') {
+                      setCount('')
+                      return
+                    }
+                    const n = Number(raw)
+                    if (!Number.isNaN(n)) setCount(n)
+                  }}
+                  onBlur={() => {
+                    const n = Number(count)
+                    setCount(Number.isFinite(n) && n > 0 ? Math.min(15, Math.max(1, Math.round(n))) : 5)
+                  }}
                   className="field"
                 />
               </label>

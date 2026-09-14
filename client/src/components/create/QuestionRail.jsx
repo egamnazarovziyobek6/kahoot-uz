@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { QUESTION_TYPES } from '../../lib/quiz.js'
 
 function AddMenu({ onAdd }) {
@@ -51,26 +52,58 @@ export default function QuestionRail({
   onDelete,
   onMove,
   errorsByIndex = [],
+  open = false,
+  onClose,
 }) {
-  return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-surface/70 md:flex">
-      <div className="border-b border-white/10 px-4 py-3">
-        <p className="font-display text-sm font-extrabold text-ink">
-          Savollar <span className="text-ink-soft">({questions.length})</span>
-        </p>
-      </div>
+  function selectAndClose(qid) {
+    onSelect(qid)
+    onClose?.()
+  }
 
-      <ol className="flex-1 space-y-2 overflow-y-auto p-3">
-        {questions.map((q, i) => {
-          const active = q.id === selectedId
-          const hasErrors = (errorsByIndex[i]?.length ?? 0) > 0
-          return (
-            <li key={q.id}>
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => onSelect(q.id)}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(q.id)}
+  return (
+    <>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-30 bg-ink/40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 max-w-[85vw] flex-col border-r border-white/10 bg-surface shadow-2xl transition-transform duration-300 ease-out md:static md:z-auto md:w-64 md:max-w-none md:translate-x-0 md:shadow-none md:transition-none md:flex ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+          <p className="font-display text-sm font-extrabold text-ink">
+            Savollar <span className="text-ink-soft">({questions.length})</span>
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-7 w-7 place-items-center rounded-lg text-ink-soft hover:bg-black/5 md:hidden"
+            title="Yopish"
+          >
+            ✕
+          </button>
+        </div>
+
+        <ol className="flex-1 space-y-2 overflow-y-auto p-3">
+          {questions.map((q, i) => {
+            const active = q.id === selectedId
+            const hasErrors = (errorsByIndex[i]?.length ?? 0) > 0
+            return (
+              <li key={q.id}>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => selectAndClose(q.id)}
+                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectAndClose(q.id)}
                 className={`group cursor-pointer rounded-xl border-2 p-2.5 transition-colors ${
                   active
                     ? 'border-samarkand bg-samarkand/8'
@@ -108,7 +141,7 @@ export default function QuestionRail({
                   </span>
                 </div>
 
-                <div className="mt-2 hidden items-center gap-1 group-hover:flex">
+                <div className="mt-2 flex items-center gap-1.5">
                   <RailIcon
                     title="Yuqoriga"
                     onClick={(e) => {
@@ -154,10 +187,11 @@ export default function QuestionRail({
         })}
       </ol>
 
-      <div className="border-t border-white/10 p-3">
-        <AddMenu onAdd={onAdd} />
-      </div>
-    </aside>
+        <div className="border-t border-white/10 p-3">
+          <AddMenu onAdd={onAdd} />
+        </div>
+      </aside>
+    </>
   )
 }
 
@@ -168,7 +202,7 @@ function RailIcon({ children, onClick, title, danger, disabled }) {
       title={title}
       onClick={onClick}
       disabled={disabled}
-      className={`grid h-6 w-6 place-items-center rounded-md border border-white/10 bg-surface text-xs transition-colors disabled:opacity-25 ${
+      className={`grid h-7 w-7 place-items-center rounded-md border border-white/10 bg-surface text-xs transition-colors disabled:opacity-25 ${
         danger ? 'hover:border-anor hover:text-anor' : 'hover:border-samarkand hover:text-samarkand'
       }`}
     >
