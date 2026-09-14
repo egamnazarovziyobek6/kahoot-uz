@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { IconCheck, IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react'
 import AnswerShape from './AnswerShape.jsx'
 import { ANSWER_STYLES } from '../../lib/quiz.js'
 
@@ -71,8 +72,8 @@ function PreviewInner({ quiz, startIndex, onClose }) {
           <span className="font-display text-sm font-extrabold">
             Ko‘rib chiqish · Savol {i + 1}/{total}
           </span>
-          <button type="button" onClick={onClose} className="text-lg">
-            ✕
+          <button type="button" onClick={onClose}>
+            <IconX size={20} />
           </button>
         </div>
 
@@ -113,7 +114,7 @@ function PreviewInner({ quiz, startIndex, onClose }) {
                   >
                     <AnswerShape shape={st.shape} size={22} />
                     <span className="flex-1">{a.text || `Javob ${idx + 1}`}</span>
-                    {revealed && a.correct && <span>✓</span>}
+                    {revealed && a.correct && <IconCheck size={18} className="shrink-0" />}
                   </button>
                 )
               })}
@@ -128,7 +129,7 @@ function PreviewInner({ quiz, startIndex, onClose }) {
             disabled={i === 0}
             className="chip disabled:opacity-30"
           >
-            ‹ Oldingi
+            <IconChevronLeft size={14} /> Oldingi
           </button>
           <button type="button" onClick={() => setRevealed((v) => !v)} className="chip">
             {revealed ? 'Javobni yashirish' : 'To‘g‘ri javobni ko‘rsatish'}
@@ -139,7 +140,7 @@ function PreviewInner({ quiz, startIndex, onClose }) {
             disabled={i === total - 1}
             className="chip disabled:opacity-30"
           >
-            Keyingi ›
+            Keyingi <IconChevronRight size={14} />
           </button>
         </div>
       </motion.div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import { IconCamera } from '@tabler/icons-react'
 import { popIn } from '../lib/motion.js'
 
 const SIZE = 480
@@ -152,7 +153,10 @@ export default function CameraCapture({ onCapture, onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm rounded-3xl border border-white/10 bg-surface p-6 text-center shadow-pop"
       >
-        <h2 className="font-display text-lg font-extrabold text-ink">📷 Selfi olish</h2>
+        <h2 className="flex items-center justify-center gap-2 font-display text-lg font-extrabold text-ink">
+          <IconCamera size={20} className="text-gold" />
+          Selfi olish
+        </h2>
         <p className="mt-1 text-sm text-ink-soft">
           Rasm profilingizda ko'rinadi. Nomaqbul (18+) tarkibning oldini olish uchun surat bilan birga
           {' '}
@@ -184,7 +188,7 @@ export default function CameraCapture({ onCapture, onClose }) {
               <button
                 type="button"
                 onClick={save}
-                className="btn-samarkand flex-1 justify-center disabled:opacity-50"
+                className="btn-gold flex-1 justify-center disabled:opacity-50"
                 disabled={saving || recording}
               >
                 {saving ? 'Saqlanmoqda…' : recording ? 'Video yozilmoqda…' : 'Saqlash'}

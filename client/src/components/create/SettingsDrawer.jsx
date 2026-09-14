@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { IconPhoto, IconX } from '@tabler/icons-react'
 import { SUBJECTS, GRADES, THEME_COLORS, IMAGE_MAX_BYTES } from '../../lib/quiz.js'
 
 export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
@@ -53,7 +54,7 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
                 onClick={onClose}
                 className="grid h-9 w-9 place-items-center rounded-xl border-2 border-white/10 bg-surface"
               >
-                ✕
+                <IconX size={18} />
               </button>
             </div>
 
@@ -150,8 +151,8 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
                     </button>
                   </div>
                 ) : (
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/15 py-6 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
-                    🖼️ Rasm tanlash
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/15 py-6 text-sm font-bold text-ink-soft hover:border-gold hover:text-gold">
+                    <IconPhoto size={16} /> Rasm tanlash
                     <input type="file" accept="image/*" onChange={handleCover} className="hidden" />
                   </label>
                 )}
@@ -180,7 +181,7 @@ export default function SettingsDrawer({ open, quiz, onClose, onPatch }) {
             </div>
 
             <div className="border-t border-white/10 p-4">
-              <button type="button" onClick={onClose} className="btn-samarkand w-full">
+              <button type="button" onClick={onClose} className="btn-gold w-full">
                 Tayyor
               </button>
             </div>

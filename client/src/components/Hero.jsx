@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { IconPlayerPlayFilled } from '@tabler/icons-react'
 import JoinPin from './JoinPin.jsx'
 import Mascot from './mascots/Mascot.jsx'
 import FloatingDecor from './decor/FloatingDecor.jsx'
@@ -53,8 +54,8 @@ export default function Hero() {
             <Link to="/yaratish" className="btn-primary text-lg">
               Bepul boshlash
             </Link>
-            <a href="#qanday" className="btn-ghost text-lg">
-              ▶ Qanday ishlaydi
+            <a href="#qanday" className="btn-ghost !gap-2 text-lg">
+              <IconPlayerPlayFilled size={16} /> Qanday ishlaydi
             </a>
           </motion.div>
 

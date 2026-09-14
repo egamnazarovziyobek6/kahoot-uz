@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { IconCheck, IconMessageCircle } from '@tabler/icons-react'
 import VerifiedBadge from '../components/VerifiedBadge.jsx'
 import ReactionIcon, { REACTION_LABELS } from '../components/icons/ReactionIcon.jsx'
 import { RepostIcon, ShareIcon, TrashIcon } from '../components/icons/SocialIcons.jsx'
@@ -22,7 +23,7 @@ function timeAgo(ts) {
 function Avatar({ author }) {
   if (author.avatar) return <img src={author.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
   return (
-    <span className="grid h-10 w-10 place-items-center rounded-full bg-samarkand text-sm font-extrabold text-white">
+    <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-sm font-extrabold text-white">
       {author.name?.[0]?.toUpperCase() || '?'}
     </span>
   )
@@ -41,7 +42,7 @@ function ReactionBar({ post, onReact }) {
             onClick={() => onReact(post.id, type)}
             title={REACTION_LABELS[type]}
             className={`flex items-center gap-1 rounded-full border px-2 py-1 transition-colors ${
-              mine ? 'border-samarkand bg-samarkand/15' : 'border-white/10 hover:border-white/25'
+              mine ? 'border-gold bg-gold/15' : 'border-white/10 hover:border-white/25'
             }`}
           >
             <ReactionIcon type={type} size={16} />
@@ -97,7 +98,7 @@ function PostCard({ post, teacher, onReact, onRepost, onShare, onDelete }) {
               <button
                 type="button"
                 onClick={() => onShare(post.id)}
-                className="text-ink-soft transition-colors hover:text-samarkand-light"
+                className="text-ink-soft transition-colors hover:text-gold-light"
                 title="Ulashish"
               >
                 <ShareIcon size={18} />
@@ -216,7 +217,7 @@ export default function Forum() {
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/logo.svg?v=2" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
-              Kahoot <span className="text-samarkand">UZ</span>
+              Kahoot <span className="text-gold">UZ</span>
             </span>
           </Link>
           <Link to={teacher ? '/testlarim' : '/'} className="btn-ghost !px-3 !py-2 text-sm">
@@ -225,7 +226,9 @@ export default function Forum() {
         </div>
       </header>
       <main className="section max-w-2xl py-10">
-        <h1 className="font-display text-3xl font-extrabold text-ink">💬 Forum</h1>
+        <h1 className="flex items-center gap-2 font-display text-3xl font-extrabold text-ink">
+          <IconMessageCircle size={28} className="text-gold" /> Forum
+        </h1>
         <p className="mt-2 text-ink-soft">O'qituvchi va o'quvchilar fikr almashadigan ochiq lenta.</p>
 
         <form onSubmit={submit} className="card mt-6">
@@ -269,8 +272,8 @@ export default function Forum() {
                 onDelete={removePost}
               />
               {shareMsg === p.id && (
-                <span className="absolute right-4 top-3 rounded-full bg-chaman px-2 py-0.5 text-xs font-bold text-white">
-                  Havola nusxalandi ✓
+                <span className="absolute right-4 top-3 inline-flex items-center gap-1 rounded-full bg-chaman px-2 py-0.5 text-xs font-bold text-white">
+                  <IconCheck size={12} /> Havola nusxalandi
                 </span>
               )}
             </div>

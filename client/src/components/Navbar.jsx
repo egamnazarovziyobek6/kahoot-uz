@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
+import { IconMessageCircle, IconMenu2, IconX } from '@tabler/icons-react'
 
 const links = [
   { href: '#imkoniyatlar', label: 'Imkoniyatlar' },
@@ -18,7 +19,7 @@ export default function Navbar() {
         <a href="#top" className="flex items-center gap-2.5">
           <img src="/logo.svg?v=2" alt="" width={38} height={38} className="drop-shadow-sm" />
           <span className="font-display text-xl font-extrabold tracking-tight text-ink">
-            Kahoot <span className="text-samarkand">UZ</span>
+            Kahoot <span className="text-gold">UZ</span>
           </span>
         </a>
 
@@ -27,15 +28,15 @@ export default function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="font-semibold text-ink-soft transition-colors hover:text-samarkand"
+                className="font-semibold text-ink-soft transition-colors hover:text-gold"
               >
                 {l.label}
               </a>
             </li>
           ))}
           <li>
-            <Link to="/forum" className="font-semibold text-ink-soft transition-colors hover:text-samarkand">
-              💬 Forum
+            <Link to="/forum" className="font-semibold text-ink-soft transition-colors hover:text-gold">
+              <IconMessageCircle size={16} className="inline -mt-0.5 mr-1" /> Forum
             </Link>
           </li>
         </ul>
@@ -55,7 +56,7 @@ export default function Navbar() {
           aria-label="Menyu"
           aria-expanded={open}
         >
-          <span className="text-lg">{open ? '✕' : '☰'}</span>
+          {open ? <IconX size={20} /> : <IconMenu2 size={20} />}
         </button>
       </nav>
 
@@ -85,7 +86,7 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   className="block rounded-xl px-3 py-2.5 font-semibold text-ink-soft hover:bg-surface"
                 >
-                  💬 Forum
+                  <IconMessageCircle size={16} className="inline -mt-0.5 mr-1" /> Forum
                 </Link>
               </li>
               <li className="mt-2 flex gap-3 px-1 md:hidden">

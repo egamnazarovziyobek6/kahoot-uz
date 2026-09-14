@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { IconLoader2, IconSparkles, IconX } from '@tabler/icons-react'
 import { QUESTION_TYPES } from '../../lib/quiz.js'
 import { api } from '../../lib/api.js'
 
@@ -59,15 +60,15 @@ export default function GenerateModal({ open, onClose, onInsert }) {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-display text-lg font-extrabold text-ink">
-                ✨ Gemini bilan savol yaratish
+              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-ink">
+                <IconSparkles size={18} className="text-gold" /> Gemini bilan savol yaratish
               </h2>
               <button
                 type="button"
                 onClick={onClose}
                 className="grid h-8 w-8 place-items-center rounded-lg text-ink-soft hover:bg-black/5"
               >
-                ✕
+                <IconX size={18} />
               </button>
             </div>
 
@@ -129,7 +130,7 @@ export default function GenerateModal({ open, onClose, onInsert }) {
                     data-active={types.includes(key)}
                     className="chip"
                   >
-                    {t.icon} {t.label}
+                    <t.icon size={14} /> {t.label}
                   </button>
                 ))}
               </div>
@@ -145,9 +146,17 @@ export default function GenerateModal({ open, onClose, onInsert }) {
               type="button"
               onClick={generate}
               disabled={busy}
-              className="btn-primary w-full disabled:opacity-60"
+              className="btn-primary w-full !gap-1.5 disabled:opacity-60"
             >
-              {busy ? 'Yaratilmoqda…' : "✨ Savollarni yaratish"}
+              {busy ? (
+                <>
+                  <IconLoader2 size={16} className="animate-spin" /> Yaratilmoqda…
+                </>
+              ) : (
+                <>
+                  <IconSparkles size={16} /> Savollarni yaratish
+                </>
+              )}
             </button>
           </motion.div>
         </>

@@ -21,7 +21,7 @@ export default function Footer() {
           <div className="flex items-center gap-2.5">
             <img src="/logo.svg?v=2" alt="" width={34} height={34} />
             <span className="font-display text-lg font-extrabold text-ink">
-              Kahoot <span className="text-samarkand">UZ</span>
+              Kahoot <span className="text-gold">UZ</span>
             </span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-ink-soft">
@@ -37,7 +37,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {c.links.map((l) => (
                 <li key={l}>
-                  <a href="#top" className="text-sm text-ink-soft transition-colors hover:text-samarkand">
+                  <a href="#top" className="text-sm text-ink-soft transition-colors hover:text-gold">
                     {l}
                   </a>
                 </li>

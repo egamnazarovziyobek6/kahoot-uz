@@ -3,7 +3,7 @@
 
 export const BODY_COLORS = [
   { id: 'anor', label: 'Anor', value: '#FF4D5E' },
-  { id: 'samarkand', label: 'Samarqand', value: '#14B8C7' },
+  { id: 'teal', label: 'Samarqand', value: '#14B8C7' },
   { id: 'indigo', label: 'Binafsha', value: '#6A5CF5' },
   { id: 'saffron', label: 'Zaʻfaron', value: '#F5A623' },
   { id: 'chaman', label: 'Chaman', value: '#2FD583' },

@@ -1,11 +1,13 @@
 // Test (viktorina) ma'lumot modeli, konstantalar va yordamchi funksiyalar.
 // Hozircha localStorage'da saqlanadi — kelajakda server API'siga almashtiriladi.
 
+import { IconChecklist, IconDiamond, IconKeyboard, IconScale } from '@tabler/icons-react'
+
 export const QUESTION_TYPES = {
-  quiz: { label: 'Viktorina', hint: 'Bitta to‘g‘ri javob', icon: '◆' },
-  multi: { label: 'Ko‘p javobli', hint: 'Bir nechta to‘g‘ri javob', icon: '☑' },
-  truefalse: { label: 'To‘g‘ri / Noto‘g‘ri', hint: 'Ikki variant', icon: '⚖' },
-  input: { label: 'Yozma javob', hint: 'O‘quvchi javobni yozadi', icon: '⌨' },
+  quiz: { label: 'Viktorina', hint: 'Bitta to‘g‘ri javob', icon: IconDiamond },
+  multi: { label: 'Ko‘p javobli', hint: 'Bir nechta to‘g‘ri javob', icon: IconChecklist },
+  truefalse: { label: 'To‘g‘ri / Noto‘g‘ri', hint: 'Ikki variant', icon: IconScale },
+  input: { label: 'Yozma javob', hint: 'O‘quvchi javobni yozadi', icon: IconKeyboard },
 }
 
 export const TIME_OPTIONS = [5, 10, 20, 30, 45, 60, 90, 120]

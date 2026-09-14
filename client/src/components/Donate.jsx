@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { IconCheck, IconCreditCard, IconHeartFilled } from '@tabler/icons-react'
 import Mascot from './mascots/Mascot.jsx'
 import NaqshPattern from './decor/NaqshPattern.jsx'
 import { DEFAULT_CHARACTER } from '../lib/avatarParts.js'
@@ -31,8 +32,9 @@ export default function Donate() {
         className="card grid gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[1.1fr_1fr] lg:items-center"
       >
         <div>
-          <span className="chip" data-active="true">
-            💛 Loyihani qo‘llab-quvvatlang
+          <span className="chip inline-flex items-center gap-1.5" data-active="true">
+            <IconHeartFilled size={14} />
+            Loyihani qo‘llab-quvvatlang
           </span>
           <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
             Kahoot UZ rivojlanishiga hissa qo‘shing
@@ -52,15 +54,13 @@ export default function Donate() {
           <div
             className="relative overflow-hidden rounded-2xl p-6 text-white shadow-pop"
             style={{
-              background: 'linear-gradient(160deg, #1EA5B8 0%, #0E7C9D 55%, #124A5E 100%)',
+              background: 'linear-gradient(160deg, #2a2210 0%, #171310 55%, #0b0a08 100%)',
             }}
           >
-            <NaqshPattern id="naqsh-donat" color="#FBF3E4" opacity={0.12} />
+            <NaqshPattern id="naqsh-donat" color="#F2C669" opacity={0.1} />
             <div className="relative flex items-center justify-between">
               <span className="font-display text-lg font-extrabold">Kahoot UZ</span>
-              <span className="text-2xl" aria-hidden="true">
-                💳
-              </span>
+              <IconCreditCard size={26} className="text-gold-light" aria-hidden="true" />
             </div>
             <p className="relative mt-10 select-all font-mono text-2xl font-extrabold tracking-wider sm:text-[1.65rem]">
               {CARD_DISPLAY}
@@ -71,8 +71,13 @@ export default function Donate() {
             </div>
           </div>
 
-          <button type="button" onClick={copyCard} className="btn-samarkand mt-4 w-full justify-center">
-            {copied ? 'Nusxalandi ✓' : 'Karta raqamini nusxalash'}
+          <button
+            type="button"
+            onClick={copyCard}
+            className="btn-gold mt-4 w-full !gap-1.5 justify-center"
+          >
+            {copied && <IconCheck size={18} />}
+            {copied ? 'Nusxalandi' : 'Karta raqamini nusxalash'}
           </button>
         </div>
       </motion.div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { IconArrowLeft, IconCheck } from '@tabler/icons-react'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import VerifiedBadge from '../components/VerifiedBadge.jsx'
@@ -90,11 +91,11 @@ export default function AdminTeacherDetail() {
           <Link to="/admin" className="flex items-center gap-2.5">
             <img src="/logo.svg?v=2" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
-              Admin <span className="text-samarkand-light">panel</span>
+              Admin <span className="text-gold-light">panel</span>
             </span>
           </Link>
-          <Link to="/admin" className="btn-ghost">
-            ← Ro'yxatga
+          <Link to="/admin" className="btn-ghost !gap-1.5">
+            <IconArrowLeft size={16} /> Ro'yxatga
           </Link>
         </div>
       </header>
@@ -104,7 +105,7 @@ export default function AdminTeacherDetail() {
           {teacher.avatar ? (
             <img src={teacher.avatar} alt="" className="h-16 w-16 rounded-full object-cover" />
           ) : (
-            <span className="grid h-16 w-16 place-items-center rounded-full bg-samarkand text-xl font-extrabold text-white">
+            <span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-xl font-extrabold text-white">
               {teacher.name?.[0]?.toUpperCase() || '?'}
             </span>
           )}
@@ -120,8 +121,14 @@ export default function AdminTeacherDetail() {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <button type="button" onClick={() => toggle('verify', !teacher.isVerified)} className="chip" data-active={teacher.isVerified}>
-            {teacher.isVerified ? "✓ Tasdiqlangan" : 'Tasdiqlash'}
+          <button
+            type="button"
+            onClick={() => toggle('verify', !teacher.isVerified)}
+            className="chip !gap-1"
+            data-active={teacher.isVerified}
+          >
+            {teacher.isVerified && <IconCheck size={12} />}
+            {teacher.isVerified ? 'Tasdiqlangan' : 'Tasdiqlash'}
           </button>
           <button
             type="button"
@@ -147,7 +154,7 @@ export default function AdminTeacherDetail() {
             <label className="mb-1 block text-xs font-extrabold uppercase tracking-wide text-ink-soft">Email</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} className="field" />
           </div>
-          <button type="submit" disabled={saving} className="btn-samarkand sm:col-span-2 justify-center">
+          <button type="submit" disabled={saving} className="btn-gold sm:col-span-2 justify-center">
             {saving ? 'Saqlanmoqda…' : 'Saqlash'}
           </button>
         </form>

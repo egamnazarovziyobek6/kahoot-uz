@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { IconArrowDown, IconArrowUp, IconCopy, IconX } from '@tabler/icons-react'
 import { QUESTION_TYPES } from '../../lib/quiz.js'
 
 function AddMenu({ onAdd }) {
@@ -9,7 +10,7 @@ function AddMenu({ onAdd }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="btn-samarkand w-full !py-2.5 text-sm"
+        className="btn-gold w-full !py-2.5 text-sm"
       >
         + Savol qo‘shish
       </button>
@@ -27,8 +28,8 @@ function AddMenu({ onAdd }) {
                 }}
                 className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-cream"
               >
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-samarkand/12 text-sm">
-                  {t.icon}
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gold/12 text-gold">
+                  <t.icon size={16} />
                 </span>
                 <span>
                   <span className="block text-sm font-bold text-ink">{t.label}</span>
@@ -89,7 +90,7 @@ export default function QuestionRail({
             className="grid h-7 w-7 place-items-center rounded-lg text-ink-soft hover:bg-black/5 md:hidden"
             title="Yopish"
           >
-            ✕
+            <IconX size={16} />
           </button>
         </div>
 
@@ -106,7 +107,7 @@ export default function QuestionRail({
                   onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectAndClose(q.id)}
                 className={`group cursor-pointer rounded-xl border-2 p-2.5 transition-colors ${
                   active
-                    ? 'border-samarkand bg-samarkand/8'
+                    ? 'border-gold bg-gold/8'
                     : 'border-transparent bg-surface hover:border-white/10'
                 }`}
               >
@@ -149,7 +150,7 @@ export default function QuestionRail({
                       onMove(q.id, -1)
                     }}
                   >
-                    ↑
+                    <IconArrowUp size={14} />
                   </RailIcon>
                   <RailIcon
                     title="Pastga"
@@ -158,7 +159,7 @@ export default function QuestionRail({
                       onMove(q.id, 1)
                     }}
                   >
-                    ↓
+                    <IconArrowDown size={14} />
                   </RailIcon>
                   <RailIcon
                     title="Nusxa olish"
@@ -167,7 +168,7 @@ export default function QuestionRail({
                       onDuplicate(q.id)
                     }}
                   >
-                    ⧉
+                    <IconCopy size={14} />
                   </RailIcon>
                   <RailIcon
                     title="O‘chirish"
@@ -178,7 +179,7 @@ export default function QuestionRail({
                       onDelete(q.id)
                     }}
                   >
-                    ✕
+                    <IconX size={14} />
                   </RailIcon>
                 </div>
               </div>
@@ -203,7 +204,7 @@ function RailIcon({ children, onClick, title, danger, disabled }) {
       onClick={onClick}
       disabled={disabled}
       className={`grid h-7 w-7 place-items-center rounded-md border border-white/10 bg-surface text-xs transition-colors disabled:opacity-25 ${
-        danger ? 'hover:border-anor hover:text-anor' : 'hover:border-samarkand hover:text-samarkand'
+        danger ? 'hover:border-anor hover:text-anor' : 'hover:border-gold hover:text-gold'
       }`}
     >
       {children}

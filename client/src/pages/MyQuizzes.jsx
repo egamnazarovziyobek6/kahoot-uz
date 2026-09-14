@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import {
+  IconCopy,
+  IconMessageCircle,
+  IconPencil,
+  IconPlayerPlayFilled,
+  IconTools,
+  IconTrash,
+} from '@tabler/icons-react'
 import Footer from '../components/Footer.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
 import CameraCapture from '../components/CameraCapture.jsx'
@@ -59,7 +67,7 @@ export default function MyQuizzes() {
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/logo.svg?v=2" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
-              Kahoot <span className="text-samarkand">UZ</span>
+              Kahoot <span className="text-gold">UZ</span>
             </span>
           </Link>
           <div className="flex items-center gap-3">
@@ -68,12 +76,12 @@ export default function MyQuizzes() {
                 type="button"
                 onClick={() => setShowCamera(true)}
                 title="Profil rasmini yangilash"
-                className="flex items-center gap-2 rounded-full border border-white/10 bg-surface py-1 pl-1 pr-3 hover:border-samarkand/50"
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-surface py-1 pl-1 pr-3 hover:border-gold/50"
               >
                 {teacher.avatar ? (
                   <img src={teacher.avatar} alt="" className="h-7 w-7 rounded-full object-cover" />
                 ) : (
-                  <span className="grid h-7 w-7 place-items-center rounded-full bg-samarkand text-xs font-extrabold text-white">
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-xs font-extrabold text-white">
                     {teacher.name?.[0]?.toUpperCase() || '?'}
                   </span>
                 )}
@@ -82,12 +90,12 @@ export default function MyQuizzes() {
                 </span>
               </button>
             )}
-            <Link to="/forum" className="btn-ghost !px-3 !py-2 text-sm">
-              💬 Forum
+            <Link to="/forum" className="btn-ghost !gap-1.5 !px-3 !py-2 text-sm">
+              <IconMessageCircle size={16} /> Forum
             </Link>
             {teacher?.isAdmin && (
-              <Link to="/admin" className="btn-ghost !px-3 !py-2 text-sm">
-                🛠 Admin
+              <Link to="/admin" className="btn-ghost !gap-1.5 !px-3 !py-2 text-sm">
+                <IconTools size={16} /> Admin
               </Link>
             )}
             <Link to="/yaratish" className="btn-primary !px-4 !py-2 text-sm">
@@ -121,7 +129,7 @@ export default function MyQuizzes() {
               Hali test yo‘q
             </p>
             <p className="mt-1 text-ink-soft">Birinchi viktorinangizni bir necha daqiqada tuzing.</p>
-            <Link to="/yaratish" className="btn-samarkand mt-5">
+            <Link to="/yaratish" className="btn-gold mt-5">
               Test yaratish
             </Link>
           </div>
@@ -175,15 +183,15 @@ export default function MyQuizzes() {
                         disabled={!v.ok}
                         onClick={() => navigate(`/host/yangi`, { state: { quizId: q.id } })}
                         title={!v.ok ? 'Avval testni tugallang' : "O'yinni boshlash"}
-                        className="btn-samarkand !px-3 !py-1.5 text-xs disabled:opacity-40"
+                        className="btn-gold !gap-1 !px-3 !py-1.5 text-xs disabled:opacity-40"
                       >
-                        ▶ Boshlash
+                        <IconPlayerPlayFilled size={13} /> Boshlash
                       </button>
                       <Link
                         to={`/yaratish/${q.id}`}
-                        className="btn-ghost !px-3 !py-1.5 text-xs"
+                        className="btn-ghost !gap-1 !px-3 !py-1.5 text-xs"
                       >
-                        ✎ Tahrirlash
+                        <IconPencil size={13} /> Tahrirlash
                       </Link>
                       <button
                         type="button"
@@ -191,9 +199,9 @@ export default function MyQuizzes() {
                           await duplicateQuiz(q.id)
                           refresh()
                         }}
-                        className="btn-ghost !px-3 !py-1.5 text-xs"
+                        className="btn-ghost !gap-1 !px-3 !py-1.5 text-xs"
                       >
-                        ⧉ Nusxa
+                        <IconCopy size={13} /> Nusxa
                       </button>
                       <button
                         type="button"
@@ -205,7 +213,7 @@ export default function MyQuizzes() {
                         }}
                         className="btn-ghost !px-3 !py-1.5 text-xs hover:!border-anor hover:!text-anor"
                       >
-                        🗑
+                        <IconTrash size={14} />
                       </button>
                     </div>
                   </div>

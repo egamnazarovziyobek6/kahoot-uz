@@ -6,7 +6,7 @@ export const quizzes = [
     questions: 12,
     level: '5–6-sinf',
     color: '#E24A3B',
-    emoji: '📘',
+    icon: 'book',
   },
   {
     id: 'vocabulary',
@@ -14,7 +14,7 @@ export const quizzes = [
     questions: 15,
     level: '5–9-sinf',
     color: '#1368CE',
-    emoji: '🔤',
+    icon: 'letters',
   },
   {
     id: 'listening',
@@ -22,7 +22,7 @@ export const quizzes = [
     questions: 10,
     level: '7–9-sinf',
     color: '#2B3A8C',
-    emoji: '🎧',
+    icon: 'headphones',
   },
   {
     id: 'reading',
@@ -30,6 +30,6 @@ export const quizzes = [
     questions: 14,
     level: '8–11-sinf',
     color: '#1B7A4B',
-    emoji: '📖',
+    icon: 'bookOpen',
   },
 ]

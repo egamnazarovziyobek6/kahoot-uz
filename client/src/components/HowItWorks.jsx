@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { IconDeviceMobile, IconPencil, IconTrophy } from '@tabler/icons-react'
 import { fadeUp, stagger, inViewOnce } from '../lib/motion.js'
 
 const steps = [
@@ -6,19 +7,19 @@ const steps = [
     n: 1,
     title: 'Viktorina tayyorlang',
     text: 'Savollarni o‘zingiz yozing yoki mavzuni kiriting — Gemini AI yaratib, tekshirib beradi.',
-    emoji: '✏️',
+    icon: IconPencil,
   },
   {
     n: 2,
     title: 'PIN kodni ko‘rsating',
     text: 'Ekranda 6 xonali kod chiqadi. O‘quvchilar telefonidan shu kod bilan kiradi.',
-    emoji: '📲',
+    icon: IconDeviceMobile,
   },
   {
     n: 3,
     title: 'Birga o‘ynang',
     text: 'Savollar, taymer, ballar jadvali va g‘olib e’loni — hammasi jonli efirda.',
-    emoji: '🏆',
+    icon: IconTrophy,
   },
 ]
 
@@ -53,11 +54,11 @@ export default function HowItWorks() {
         />
         {steps.map((s) => (
           <motion.div key={s.n} variants={fadeUp} className="relative text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-samarkand font-display text-2xl font-extrabold text-white shadow-[0_10px_0_0_var(--color-samarkand-deep)]">
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gold font-display text-2xl font-extrabold text-white shadow-[0_10px_0_0_var(--color-gold-deep)]">
               {s.n}
             </div>
-            <h3 className="mt-5 text-xl font-extrabold text-ink">
-              <span className="mr-2">{s.emoji}</span>
+            <h3 className="mt-5 flex items-center justify-center gap-2 text-xl font-extrabold text-ink">
+              <s.icon size={20} className="shrink-0 text-gold" aria-hidden="true" />
               {s.title}
             </h3>
             <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">{s.text}</p>

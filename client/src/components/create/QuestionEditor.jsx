@@ -1,5 +1,15 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import {
+  IconAlertTriangle,
+  IconCheck,
+  IconChevronLeft,
+  IconChevronRight,
+  IconLoader2,
+  IconPhoto,
+  IconSparkles,
+  IconX,
+} from '@tabler/icons-react'
 import { fadeUp } from '../../lib/motion.js'
 import AutoTextarea from './AutoTextarea.jsx'
 import AnswerTile from './AnswerTile.jsx'
@@ -85,7 +95,7 @@ export default function QuestionEditor({
           disabled={index === 0}
           className="chip disabled:opacity-30"
         >
-          ‹ Oldingi
+          <IconChevronLeft size={14} /> Oldingi
         </button>
         <span className="font-display text-sm font-extrabold text-ink">
           Savol {index + 1} / {total}
@@ -96,7 +106,7 @@ export default function QuestionEditor({
           </button>
         ) : (
           <button type="button" onClick={onNext} className="chip">
-            Keyingi ›
+            Keyingi <IconChevronRight size={14} />
           </button>
         )}
       </div>
@@ -112,7 +122,7 @@ export default function QuestionEditor({
             className="chip !px-3 !py-1.5"
             title={t.hint}
           >
-            <span>{t.icon}</span> {t.label}
+            <t.icon size={14} /> {t.label}
           </button>
         ))}
       </div>
@@ -141,12 +151,12 @@ export default function QuestionEditor({
                 className="absolute -right-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-anor text-white shadow"
                 title="Rasmni olib tashlash"
               >
-                ✕
+                <IconX size={14} />
               </button>
             </div>
           ) : (
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-white/15 px-3 py-2 text-sm font-bold text-ink-soft hover:border-samarkand hover:text-samarkand">
-              🖼️ Rasm qo‘shish (ixtiyoriy)
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-white/15 px-3 py-2 text-sm font-bold text-ink-soft hover:border-gold hover:text-gold">
+              <IconPhoto size={16} /> Rasm qo‘shish (ixtiyoriy)
               <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
             </label>
           )}
@@ -169,7 +179,7 @@ export default function QuestionEditor({
             {q.answers.map((a, i) => (
               <div key={a.id} className="flex items-center gap-2">
                 <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-chaman text-white">
-                  ✓
+                  <IconCheck size={18} />
                 </span>
                 <input
                   value={a.text}
@@ -184,7 +194,7 @@ export default function QuestionEditor({
                   className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-soft hover:bg-anor/10 hover:text-anor disabled:opacity-25"
                   title="O‘chirish"
                 >
-                  ✕
+                  <IconX size={16} />
                 </button>
               </div>
             ))}
@@ -192,7 +202,7 @@ export default function QuestionEditor({
               <button
                 type="button"
                 onClick={onAddAnswer}
-                className="text-sm font-extrabold text-samarkand hover:underline"
+                className="text-sm font-extrabold text-gold hover:underline"
               >
                 + Muqobil javob
               </button>
@@ -220,7 +230,7 @@ export default function QuestionEditor({
           <button
             type="button"
             onClick={onAddAnswer}
-            className="mt-2 text-sm font-extrabold text-samarkand hover:underline"
+            className="mt-2 text-sm font-extrabold text-gold hover:underline"
           >
             + Variant qo‘shish
           </button>
@@ -233,9 +243,17 @@ export default function QuestionEditor({
           type="button"
           onClick={checkWithGemini}
           disabled={checking || !q.text.trim()}
-          className="chip !px-3 !py-1.5 disabled:opacity-40"
+          className="chip !gap-1.5 !px-3 !py-1.5 disabled:opacity-40"
         >
-          {checking ? '⏳ Tekshirilmoqda…' : '✨ Gemini bilan tekshirish'}
+          {checking ? (
+            <>
+              <IconLoader2 size={14} className="animate-spin" /> Tekshirilmoqda…
+            </>
+          ) : (
+            <>
+              <IconSparkles size={14} /> Gemini bilan tekshirish
+            </>
+          )}
         </button>
 
         {checkResult && (
@@ -245,10 +263,14 @@ export default function QuestionEditor({
             }`}
           >
             {checkResult.ok ? (
-              <p className="font-bold">✓ Gemini muammo topmadi</p>
+              <p className="flex items-center gap-1.5 font-bold">
+                <IconCheck size={16} /> Gemini muammo topmadi
+              </p>
             ) : (
               <>
-                <p className="font-bold">⚠️ Gemini quyidagilarni topdi:</p>
+                <p className="flex items-center gap-1.5 font-bold">
+                  <IconAlertTriangle size={16} /> Gemini quyidagilarni topdi:
+                </p>
                 <ul className="mt-1 list-disc space-y-0.5 pl-5">
                   {(checkResult.issues || []).map((issue) => (
                     <li key={issue}>{issue}</li>
@@ -306,7 +328,9 @@ export default function QuestionEditor({
       {errors.length > 0 && (
         <ul className="mt-4 space-y-1 rounded-xl bg-saffron/15 p-3 text-sm font-semibold text-ink">
           {errors.map((e) => (
-            <li key={e}>⚠️ {e}</li>
+            <li key={e} className="flex items-center gap-1.5">
+              <IconAlertTriangle size={14} className="shrink-0" /> {e}
+            </li>
           ))}
         </ul>
       )}

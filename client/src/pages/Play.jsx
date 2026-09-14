@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { IconCircleCheck, IconClock, IconConfetti, IconMedal, IconTrophy } from '@tabler/icons-react'
 import { getSocket, disconnectSocket } from '../lib/socket.js'
 import { ANSWER_STYLES } from '../lib/quiz.js'
 import AnswerShape from '../components/create/AnswerShape.jsx'
@@ -170,7 +171,9 @@ export default function Play() {
           <span>
             Savol {question.index + 1}/{question.total}
           </span>
-          <span className={secondsLeft <= 5 ? 'text-anor' : ''}>⏱ {secondsLeft}s</span>
+          <span className={`inline-flex items-center gap-1 ${secondsLeft <= 5 ? 'text-anor' : ''}`}>
+            <IconClock size={14} /> {secondsLeft}s
+          </span>
         </div>
 
         <motion.p
@@ -268,7 +271,7 @@ export default function Play() {
     return (
       <div className="grid min-h-screen place-items-center px-4 text-center">
         <div>
-          <p className="text-5xl">✅</p>
+          <IconCircleCheck size={56} className="mx-auto text-chaman" />
           <p className="mt-3 font-display text-lg font-extrabold text-ink">
             Javobingiz qabul qilindi
           </p>
@@ -288,7 +291,13 @@ export default function Play() {
     return (
       <div className="relative min-h-screen px-4 py-10 text-center">
         <Confetti count={16} />
-        <p className="text-6xl">{me?.rank === 1 ? '🏆' : me?.rank === 2 ? '🥈' : me?.rank === 3 ? '🥉' : '🎉'}</p>
+        {me?.rank === 1 ? (
+          <IconTrophy size={56} className="mx-auto text-gold" />
+        ) : me?.rank === 2 || me?.rank === 3 ? (
+          <IconMedal size={56} className="mx-auto text-gold-light" />
+        ) : (
+          <IconConfetti size={56} className="mx-auto text-gold" />
+        )}
         <motion.div variants={bounceIn} initial="hidden" animate="show">
           <p className="mt-2 font-display text-2xl font-extrabold text-ink">
             {me ? `${me.rank}-o‘rin` : 'O‘yin tugadi'}
@@ -314,7 +323,7 @@ export default function Play() {
           ))}
         </div>
 
-        <button type="button" onClick={() => navigate('/')} className="btn-samarkand mt-8">
+        <button type="button" onClick={() => navigate('/')} className="btn-gold mt-8">
           Bosh sahifaga
         </button>
       </div>

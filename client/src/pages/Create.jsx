@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { IconArrowLeft, IconCheck, IconSettings, IconSparkles } from '@tabler/icons-react'
 import QuestionRail from '../components/create/QuestionRail.jsx'
 import QuestionEditor from '../components/create/QuestionEditor.jsx'
 import SettingsDrawer from '../components/create/SettingsDrawer.jsx'
@@ -290,7 +291,7 @@ export default function Create() {
           className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border-2 border-white/10 bg-surface"
           title="Testlarim"
         >
-          ←
+          <IconArrowLeft size={18} />
         </Link>
 
         <button
@@ -308,16 +309,21 @@ export default function Create() {
           className="min-w-0 flex-1 rounded-lg bg-transparent px-2 py-1 font-display text-base font-extrabold text-ink outline-none hover:bg-black/5 focus:bg-black/5"
         />
 
-        <span className="hidden shrink-0 text-xs font-bold text-ink-soft sm:block">
-          {status === 'saving' ? 'Saqlanmoqda…' : status === 'saved' ? 'Saqlandi ✓' : ''}
+        <span className="hidden shrink-0 items-center gap-1 text-xs font-bold text-ink-soft sm:flex">
+          {status === 'saving' && 'Saqlanmoqda…'}
+          {status === 'saved' && (
+            <>
+              <IconCheck size={14} /> Saqlandi
+            </>
+          )}
         </span>
 
         <button
           type="button"
           onClick={() => setGenerateOpen(true)}
-          className="btn-ghost !px-3 !py-2 text-sm"
+          className="btn-ghost !gap-1.5 !px-3 !py-2 text-sm"
         >
-          ✨ <span className="hidden sm:inline">Gemini bilan yaratish</span>
+          <IconSparkles size={16} /> <span className="hidden sm:inline">Gemini bilan yaratish</span>
         </button>
         <button
           type="button"
@@ -329,11 +335,11 @@ export default function Create() {
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
-          className="btn-ghost !px-3 !py-2 text-sm"
+          className="btn-ghost !gap-1.5 !px-3 !py-2 text-sm"
         >
-          ⚙ <span className="hidden sm:inline">Sozlamalar</span>
+          <IconSettings size={16} /> <span className="hidden sm:inline">Sozlamalar</span>
         </button>
-        <button type="button" onClick={finishAndExit} className="btn-samarkand !px-4 !py-2 text-sm">
+        <button type="button" onClick={finishAndExit} className="btn-gold !px-4 !py-2 text-sm">
           Saqlash
         </button>
       </header>

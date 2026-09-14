@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { IconCheck, IconDownload, IconVideo } from '@tabler/icons-react'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import VerifiedBadge from '../components/VerifiedBadge.jsx'
@@ -128,7 +129,7 @@ export default function Admin() {
         <div>
           <p className="font-display text-xl font-extrabold text-anor">Ruxsat yo'q</p>
           <p className="mt-2 text-ink-soft">Bu sahifa faqat admin hisoblar uchun.</p>
-          <Link to="/" className="btn-samarkand mt-4 inline-flex">
+          <Link to="/" className="btn-gold mt-4 inline-flex">
             Bosh sahifaga
           </Link>
         </div>
@@ -143,7 +144,7 @@ export default function Admin() {
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/logo.svg?v=2" alt="" width={36} height={36} />
             <span className="font-display text-lg font-extrabold text-ink">
-              Admin <span className="text-samarkand-light">panel</span>
+              Admin <span className="text-gold-light">panel</span>
             </span>
           </Link>
           <Link to="/testlarim" className="btn-ghost">
@@ -222,9 +223,9 @@ export default function Admin() {
                       { key: 'createdAt', label: "Ro'yxatdan o'tgan" },
                     ])
                   }
-                  className="shrink-0 text-xs font-bold text-samarkand-light hover:underline"
+                  className="shrink-0 text-xs font-bold text-gold-light hover:underline"
                 >
-                  ⬇ CSV yuklab olish
+                  <IconDownload size={13} className="inline -mt-0.5" /> CSV yuklab olish
                 </button>
               </div>
             </div>
@@ -245,7 +246,7 @@ export default function Admin() {
                 {filteredTeachers.map((t) => (
                   <tr key={t.id} className={`border-t border-white/5 ${t.isBlocked ? 'opacity-50' : ''}`}>
                     <td className="px-4 py-3 font-bold text-ink">
-                      <Link to={`/admin/teachers/${t.id}`} className="inline-flex items-center gap-1.5 hover:text-samarkand-light">
+                      <Link to={`/admin/teachers/${t.id}`} className="inline-flex items-center gap-1.5 hover:text-gold-light">
                         {t.name}
                         {t.isVerified && <VerifiedBadge size={14} />}
                         {t.isAdmin && <span className="text-xs text-saffron">admin</span>}
@@ -253,7 +254,7 @@ export default function Admin() {
                     </td>
                     <td className="px-4 py-3 text-ink-soft">
                       {t.email ? (
-                        <a href={`mailto:${t.email}`} className="text-samarkand-light hover:underline">
+                        <a href={`mailto:${t.email}`} className="text-gold-light hover:underline">
                           {t.email}
                         </a>
                       ) : (
@@ -267,10 +268,11 @@ export default function Admin() {
                       <button
                         type="button"
                         onClick={() => toggleVerified(t)}
-                        className="chip !py-1 !text-xs"
+                        className="chip !gap-1 !py-1 !text-xs"
                         data-active={t.isVerified}
                       >
-                        {t.isVerified ? "✓ Tasdiqlangan" : 'Tasdiqlash'}
+                        {t.isVerified && <IconCheck size={12} />}
+                        {t.isVerified ? 'Tasdiqlangan' : 'Tasdiqlash'}
                       </button>
                     </td>
                     <td className="px-4 py-3">
@@ -329,9 +331,9 @@ export default function Admin() {
                       { key: 'updatedAt', label: 'Yangilangan' },
                     ])
                   }
-                  className="shrink-0 text-xs font-bold text-samarkand-light hover:underline"
+                  className="shrink-0 text-xs font-bold text-gold-light hover:underline"
                 >
-                  ⬇ CSV yuklab olish
+                  <IconDownload size={13} className="inline -mt-0.5" /> CSV yuklab olish
                 </button>
               </div>
             </div>
@@ -455,11 +457,15 @@ export default function Admin() {
                     <div className="flex flex-wrap items-center gap-2">
                       <Link
                         to={`/admin/teachers/${m.teacherId}`}
-                        className="font-extrabold text-ink hover:text-samarkand-light"
+                        className="font-extrabold text-ink hover:text-gold-light"
                       >
                         {m.teacherName}
                       </Link>
-                      {m.videoSent && <span className="chip !py-0.5 !text-[11px]">🎥 video Telegram'da</span>}
+                      {m.videoSent && (
+                        <span className="chip inline-flex items-center gap-1 !py-0.5 !text-[11px]">
+                          <IconVideo size={12} /> video Telegram'da
+                        </span>
+                      )}
                       <span
                         className={`chip !py-0.5 !text-[11px] ${
                           m.status === 'approved'

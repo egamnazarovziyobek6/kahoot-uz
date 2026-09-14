@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import Mascot from './mascots/Mascot.jsx'
-import { BODY_COLORS } from '../lib/avatarParts.js'
+import { IconBrandTelegram, IconStarFilled, IconX } from '@tabler/icons-react'
 
-const MODAL_LEFT = { color: BODY_COLORS[0].value, hat: 'doppi', face: 'tabassum' }
-const MODAL_RIGHT = { color: BODY_COLORS[5].value, hat: 'headband', face: 'ajablanish' }
-import { popIn } from '../lib/motion.js'
-
-// TODO: haqiqiy Telegram kanal manzilini shu yerga qo'ying
 const TELEGRAM_CHANNEL_URL = 'https://t.me/kahoot_uz'
-
 const SEEN_KEY = 'kahoot_uz_welcome_seen_v1'
 
+/** Tepadan sirg'alib tushadigan, sahifani to'smaydigan kichik xabar banneri */
 export default function WelcomeModal() {
   const [open, setOpen] = useState(false)
 
@@ -36,70 +30,38 @@ export default function WelcomeModal() {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] grid place-items-center bg-black/70 px-4 backdrop-blur-sm"
-          onClick={close}
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.35, ease: 'easeInOut' }}
+          className="relative z-[60] overflow-hidden border-b border-gold/20 bg-cream-deep/95"
         >
-          <motion.div
-            variants={popIn}
-            initial="hidden"
-            animate="show"
-            exit={{ opacity: 0, scale: 0.9 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-surface p-6 text-center shadow-pop sm:p-8"
-          >
-            <button
-              type="button"
-              onClick={close}
-              aria-label="Yopish"
-              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-surface-soft text-ink-soft hover:text-ink"
-            >
-              ✕
-            </button>
-
-            <div className="mx-auto -mt-2 mb-2 flex justify-center gap-1">
-              <Mascot character={MODAL_LEFT} size={64} pose="wave" />
-              <Mascot character={MODAL_RIGHT} size={64} pose="cheer" />
-            </div>
-
-            <h2 className="font-display text-xl font-extrabold text-ink sm:text-2xl">
-              Kahoot UZ'ga xush kelibsiz! 👋
-            </h2>
-            <p className="mt-2 text-sm font-bold text-samarkand-light">
-              ⭐ ZIYOBEK TEAM tomonidan yaratildi
+          <div className="section flex flex-wrap items-center justify-center gap-x-4 gap-y-2 py-2.5 text-center sm:justify-between sm:text-left">
+            <p className="flex items-center gap-2 text-sm font-bold text-ink">
+              <IconStarFilled size={14} className="shrink-0 text-gold" aria-hidden="true" />
+              Kahoot UZ'ga xush kelibsiz — yangiliklar uchun kanalga qo'shiling
             </p>
 
-            <p className="mt-4 text-sm text-ink-soft">
-              Platforma butunlay bepul va shunday qolaveradi. Agar loyiha sizga foydali bo'lsa,
-              server xarajatlariga{' '}
-              <a href="#donat" onClick={close} className="font-bold text-saffron underline">
-                homiylik qilib
-              </a>{' '}
-              qo'llab-quvvatlashingiz mumkin.
-            </p>
-
-            <div className="mt-5 rounded-2xl border border-white/10 bg-surface-soft p-4 text-left">
-              <p className="text-sm font-extrabold text-ink">📣 Yangiliklardan xabardor bo'ling</p>
-              <p className="mt-1 text-xs text-ink-soft">
-                Yangi funksiyalar, testlar va yangilanishlar haqida birinchilardan bo'lib bilish
-                uchun Telegram kanalimizga a'zo bo'ling.
-              </p>
+            <div className="flex items-center gap-2">
               <a
                 href={TELEGRAM_CHANNEL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-samarkand mt-3 w-full justify-center text-sm"
+                className="btn-gold inline-flex !gap-1.5 !px-3 !py-1.5 text-xs"
               >
-                📲 Telegram kanalga a'zo bo'lish
+                <IconBrandTelegram size={15} />
+                Kanalga qo'shilish
               </a>
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Yopish"
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink-soft hover:bg-white/5 hover:text-ink"
+              >
+                <IconX size={16} />
+              </button>
             </div>
-
-            <button type="button" onClick={close} className="btn-ghost mt-4 w-full justify-center">
-              Davom etish
-            </button>
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

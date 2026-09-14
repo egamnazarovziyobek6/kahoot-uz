@@ -98,7 +98,7 @@ export default function Login() {
         <Link to="/" className="mb-5 flex items-center gap-2.5">
           <img src="/logo.svg?v=2" alt="" width={34} height={34} />
           <span className="font-display text-lg font-extrabold text-ink">
-            Kahoot <span className="text-samarkand">UZ</span>
+            Kahoot <span className="text-gold">UZ</span>
           </span>
         </Link>
 

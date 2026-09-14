@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
+import {
+  IconCheck,
+  IconChevronRight,
+  IconClock,
+  IconConfetti,
+  IconPlayerPlayFilled,
+  IconX,
+} from '@tabler/icons-react'
 import { getSocket, disconnectSocket } from '../lib/socket.js'
 import { getQuiz } from '../lib/quizStore.js'
 import { ANSWER_STYLES } from '../lib/quiz.js'
@@ -113,7 +121,7 @@ export default function Host() {
       <div className="grid min-h-screen place-items-center px-4 text-center">
         <div>
           <p className="font-display text-xl font-extrabold text-anor">{error}</p>
-          <Link to="/testlarim" className="btn-samarkand mt-5 inline-flex">
+          <Link to="/testlarim" className="btn-gold mt-5 inline-flex">
             Testlarimga qaytish
           </Link>
         </div>
@@ -132,7 +140,7 @@ export default function Host() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-4 py-10 text-center">
         <div>
           <p className="text-sm font-bold uppercase tracking-widest text-ink-soft">PIN kodi</p>
-          <p className="font-display text-6xl font-extrabold tracking-[0.15em] text-samarkand sm:text-7xl">
+          <p className="font-display text-6xl font-extrabold tracking-[0.15em] text-gold sm:text-7xl">
             {pin}
           </p>
           <p className="mt-2 text-ink-soft">{quiz?.title || 'Test yuklanmoqda…'}</p>
@@ -168,9 +176,9 @@ export default function Host() {
           type="button"
           onClick={startGame}
           disabled={players.length === 0}
-          className="btn-primary text-lg disabled:opacity-40"
+          className="btn-primary !gap-2 text-lg disabled:opacity-40"
         >
-          ▶ O‘yinni boshlash ({players.length})
+          <IconPlayerPlayFilled size={18} /> O‘yinni boshlash ({players.length})
         </button>
       </div>
     )
@@ -186,9 +194,9 @@ export default function Host() {
           </span>
           <span>{progress.answered}/{progress.total} javob berdi</span>
           <span
-            className={secondsLeft <= 5 ? 'text-anor' : ''}
+            className={`inline-flex items-center gap-1 ${secondsLeft <= 5 ? 'text-anor' : ''}`}
           >
-            ⏱ {secondsLeft}s
+            <IconClock size={14} /> {secondsLeft}s
           </span>
         </div>
 
@@ -228,8 +236,8 @@ export default function Host() {
             </p>
           )}
 
-          <button type="button" onClick={skipQuestion} className="btn-ghost mx-auto mt-6">
-            Keyingisi ›
+          <button type="button" onClick={skipQuestion} className="btn-ghost !gap-1 mx-auto mt-6">
+            Keyingisi <IconChevronRight size={14} />
           </button>
         </div>
       </div>
@@ -243,8 +251,8 @@ export default function Host() {
       <div className="relative min-h-screen px-4 py-10">
         <Confetti />
         <div className="mx-auto max-w-3xl">
-          <h1 className="text-center font-display text-3xl font-extrabold text-ink">
-            O‘yin tugadi! 🎉
+          <h1 className="flex items-center justify-center gap-2 text-center font-display text-3xl font-extrabold text-ink">
+            <IconConfetti size={30} className="text-gold" /> O‘yin tugadi!
           </h1>
 
           <motion.div
@@ -313,7 +321,7 @@ export default function Host() {
             <button type="button" onClick={() => setReviewOpen((v) => !v)} className="btn-ghost">
               {reviewOpen ? 'Sharhni yopish' : 'Savollar sharhi'}
             </button>
-            <Link to="/testlarim" className="btn-samarkand">
+            <Link to="/testlarim" className="btn-gold">
               Testlarimga qaytish
             </Link>
           </div>
@@ -332,11 +340,11 @@ export default function Host() {
                     {q.players.map((pl) => (
                       <li
                         key={pl.playerId}
-                        className={`rounded-full px-2.5 py-1 ${
+                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 ${
                           pl.correct ? 'bg-chaman/15 text-chaman' : 'bg-anor/10 text-anor-deep'
                         }`}
                       >
-                        {pl.name} {pl.correct ? '✓' : '✕'} ({pl.points})
+                        {pl.name} {pl.correct ? <IconCheck size={12} /> : <IconX size={12} />} ({pl.points})
                       </li>
                     ))}
                   </ul>
