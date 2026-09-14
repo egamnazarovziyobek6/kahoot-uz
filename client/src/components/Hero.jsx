@@ -5,8 +5,11 @@ import Mascot from './mascots/Mascot.jsx'
 import FloatingDecor from './decor/FloatingDecor.jsx'
 import UzFlag from './decor/UzFlag.jsx'
 import CreatorBadge from './CreatorBadge.jsx'
-import { characters } from '../lib/characters.js'
+import { BODY_COLORS } from '../lib/avatarParts.js'
 import { fadeUp, stagger } from '../lib/motion.js'
+
+const HERO_LEFT = { color: BODY_COLORS[1].value, hat: 'doppi', face: 'tabassum' }
+const HERO_RIGHT = { color: BODY_COLORS[4].value, hat: 'cap', face: 'salqin' }
 
 export default function Hero() {
   return (
@@ -57,11 +60,11 @@ export default function Hero() {
 
           <motion.div variants={fadeUp} className="mt-8 flex items-center gap-4 text-sm text-ink-soft">
             <div className="flex -space-x-2">
-              {characters.map((c) => (
+              {BODY_COLORS.map((c) => (
                 <span
                   key={c.id}
                   className="grid h-9 w-9 place-items-center rounded-full border-2 border-cream"
-                  style={{ background: c.color }}
+                  style={{ background: c.value }}
                 >
                   <span className="h-2.5 w-2.5 rounded-full bg-white/80" />
                 </span>
@@ -80,7 +83,7 @@ export default function Hero() {
             animate={{ y: [0, -12, 0] }}
             transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
           >
-            <Mascot character={characters[0]} size={124} pose="wave" />
+            <Mascot character={HERO_LEFT} size={124} pose="wave" />
           </motion.div>
 
           <motion.div
@@ -88,7 +91,7 @@ export default function Hero() {
             animate={{ y: [0, -16, 0] }}
             transition={{ repeat: Infinity, duration: 6.2, ease: 'easeInOut', delay: 0.4 }}
           >
-            <Mascot character={characters[3]} size={136} pose="idle" />
+            <Mascot character={HERO_RIGHT} size={136} pose="idle" />
           </motion.div>
 
           <motion.div

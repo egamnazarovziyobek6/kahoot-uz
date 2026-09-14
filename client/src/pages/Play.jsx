@@ -5,8 +5,9 @@ import { getSocket, disconnectSocket } from '../lib/socket.js'
 import { ANSWER_STYLES } from '../lib/quiz.js'
 import AnswerShape from '../components/create/AnswerShape.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
+import QahramonBuilder from '../components/QahramonBuilder.jsx'
 import Confetti from '../components/Confetti.jsx'
-import { characters } from '../lib/characters.js'
+import { randomCharacter, DEFAULT_CHARACTER } from '../lib/avatarParts.js'
 import { bounceIn, fadeUp, popIn } from '../lib/motion.js'
 
 export default function Play() {
@@ -16,7 +17,7 @@ export default function Play() {
 
   const [step, setStep] = useState('name') // name | joining | lobby | question | waiting | ended
   const [name, setName] = useState('')
-  const [characterId, setCharacterId] = useState(characters[0].id)
+  const [avatar, setAvatar] = useState(() => randomCharacter())
   const [error, setError] = useState(null)
 
   const [question, setQuestion] = useState(null)
@@ -73,7 +74,7 @@ export default function Play() {
     setError(null)
     const socket = getSocket()
     setMyId(socket.id)
-    socket.emit('player:join', { pin, name: name.trim(), character: characterId }, (res) => {
+    socket.emit('player:join', { pin, name: name.trim(), character: avatar }, (res) => {
       if (res?.error) {
         setError(res.error)
         setStep('name')
@@ -108,7 +109,6 @@ export default function Play() {
   }
 
   if (step === 'name' || step === 'joining') {
-    const selected = characters.find((c) => c.id === characterId)
     return (
       <div className="grid min-h-screen place-items-center px-4 py-10">
         <motion.form
@@ -119,24 +119,10 @@ export default function Play() {
           className="w-full max-w-sm rounded-3xl border border-white/5 bg-surface p-6 text-center shadow-[0_18px_40px_-12px_rgba(34,48,74,0.35)]"
         >
           <p className="text-sm font-bold text-ink-soft">PIN {pin}</p>
-          <div className="my-4 flex justify-center">
-            <Mascot character={selected} size={110} pose="wave" />
-          </div>
+          <p className="mt-1 font-display text-lg font-extrabold text-ink">Qahramoningizni yasang</p>
 
-          <div className="mb-4 flex flex-wrap justify-center gap-2">
-            {characters.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => setCharacterId(c.id)}
-                aria-pressed={characterId === c.id}
-                className={`grid h-10 w-10 place-items-center rounded-full border-2 transition-colors ${
-                  characterId === c.id ? 'border-samarkand' : 'border-transparent'
-                }`}
-                style={{ background: c.color }}
-                title={c.name}
-              />
-            ))}
+          <div className="my-4">
+            <QahramonBuilder value={avatar} onChange={setAvatar} previewSize={110} />
           </div>
 
           <input
@@ -167,11 +153,7 @@ export default function Play() {
             animate={{ y: [0, -14, 0] }}
             transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
           >
-            <Mascot
-              character={characters.find((c) => c.id === characterId)}
-              size={130}
-              pose="idle"
-            />
+            <Mascot character={avatar} size={130} pose="idle" />
           </motion.div>
           <p className="mt-4 font-display text-xl font-extrabold text-ink">Tayyorsiz, {name}!</p>
           <p className="mt-1 text-ink-soft">O‘yin boshlanishini kuting…</p>

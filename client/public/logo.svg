@@ -1,16 +1,54 @@
 <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="16" fill="#0E7C9D" />
-  <!-- Chust do'ppisi -->
-  <path d="M12 44c0-13 9-24 20-24s20 11 20 24z" fill="#12213A" />
-  <path d="M10 44h44v5a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3z" fill="#12213A" />
-  <!-- Qalampir (pepper) motivlari -->
-  <g fill="#FBF3E4">
-    <path d="M32 24c2.4 2 3.4 4.6 2.2 6.6-1.1 1.9-3.6 2-4.8 0-1.2-2 0-4.6 2.6-6.6z" />
-    <path d="M21 31c2.7 1 4.3 3.1 3.8 5.2-.5 2-2.8 2.7-4.4 1.2-1.6-1.5-1.3-4.4.6-6.4z" />
-    <path d="M43 31c-2.7 1-4.3 3.1-3.8 5.2.5 2 2.8 2.7 4.4 1.2 1.6-1.5 1.3-4.4-.6-6.4z" />
-  </g>
-  <!-- Asos naqshi -->
-  <g stroke="#FBF3E4" stroke-width="1.6" fill="none">
-    <path d="M13 48c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0 4 2.6 6 0 4-2.6 6 0 4 2.6 6 0" />
+  <defs>
+    <clipPath id="badge">
+      <rect width="64" height="64" rx="16" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#badge)">
+    <!-- fon -->
+    <rect width="64" height="64" fill="#0b1220" />
+
+    <!-- O'zbekiston bayrog'i chiziqlari -->
+    <rect width="64" height="19.5" y="0" fill="#0099B5" />
+    <rect width="64" height="3" y="19.5" fill="#CE1126" />
+    <rect width="64" height="19" y="22.5" fill="#fff" />
+    <rect width="64" height="3" y="41.5" fill="#CE1126" />
+    <rect width="64" height="19.5" y="44.5" fill="#1EB53A" />
+
+    <!-- oy va yulduzlar -->
+    <circle cx="12.5" cy="9" r="5.4" fill="#fff" />
+    <circle cx="14.3" cy="9" r="5.4" fill="#0099B5" />
+    <g fill="#fff">
+      <circle cx="21.5" cy="5" r="1.05" />
+      <circle cx="25.8" cy="5" r="1.05" />
+      <circle cx="21.5" cy="9.2" r="1.05" />
+      <circle cx="25.8" cy="9.2" r="1.05" />
+      <circle cx="30" cy="9.2" r="1.05" />
+    </g>
+
+    <!-- "K!" harflari -->
+    <g
+      transform="translate(32 33)"
+      font-family="'Space Grotesk', Arial, sans-serif"
+      font-weight="800"
+      text-anchor="middle"
+    >
+      <text
+        x="0"
+        y="13"
+        font-size="34"
+        fill="#0b1220"
+        stroke="#0b1220"
+        stroke-width="5"
+        stroke-linejoin="round"
+        paint-order="stroke"
+      >
+        K!
+      </text>
+      <text x="0" y="13" font-size="34" fill="#FBF3E4">
+        K!
+      </text>
+    </g>
   </g>
 </svg>

@@ -7,7 +7,7 @@ import { ANSWER_STYLES } from '../lib/quiz.js'
 import AnswerShape from '../components/create/AnswerShape.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
 import Confetti from '../components/Confetti.jsx'
-import { characters } from '../lib/characters.js'
+import { DEFAULT_CHARACTER } from '../lib/avatarParts.js'
 import { bounceIn, celebrate, fadeUp } from '../lib/motion.js'
 
 export default function Host() {
@@ -141,7 +141,7 @@ export default function Host() {
         <div className="flex min-h-16 flex-wrap items-center justify-center gap-3">
           <AnimatePresence>
             {players.map((p) => {
-              const character = characters.find((c) => c.id === p.character) || characters[0]
+              const character = p.character || DEFAULT_CHARACTER
               return (
                 <motion.div
                   key={p.id}
@@ -262,7 +262,7 @@ export default function Host() {
                   style={{ order: i }}
                 >
                   <Mascot
-                    character={characters.find((c) => c.id === p.character) || characters[0]}
+                    character={p.character || DEFAULT_CHARACTER}
                     size={i === 1 ? 88 : 68}
                     pose="cheer"
                   />

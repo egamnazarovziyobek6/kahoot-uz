@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Mascot from './mascots/Mascot.jsx'
-import { characters } from '../lib/characters.js'
+import { BODY_COLORS } from '../lib/avatarParts.js'
+
+const MODAL_LEFT = { color: BODY_COLORS[0].value, hat: 'doppi', face: 'tabassum' }
+const MODAL_RIGHT = { color: BODY_COLORS[5].value, hat: 'headband', face: 'ajablanish' }
 import { popIn } from '../lib/motion.js'
 
 // TODO: haqiqiy Telegram kanal manzilini shu yerga qo'ying
@@ -57,8 +60,8 @@ export default function WelcomeModal() {
             </button>
 
             <div className="mx-auto -mt-2 mb-2 flex justify-center gap-1">
-              <Mascot character={characters[0]} size={64} pose="wave" />
-              <Mascot character={characters[4]} size={64} pose="cheer" />
+              <Mascot character={MODAL_LEFT} size={64} pose="wave" />
+              <Mascot character={MODAL_RIGHT} size={64} pose="cheer" />
             </div>
 
             <h2 className="font-display text-xl font-extrabold text-ink sm:text-2xl">

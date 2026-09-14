@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Mascot from '../components/mascots/Mascot.jsx'
 import UzFlag from '../components/decor/UzFlag.jsx'
-import { characters } from '../lib/characters.js'
+import { DEFAULT_CHARACTER } from '../lib/avatarParts.js'
 import { api, API_ORIGIN } from '../lib/api.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import { fadeUp, popIn } from '../lib/motion.js'
@@ -103,7 +103,7 @@ export default function Login() {
         </Link>
 
         <div className="mb-5 flex items-center justify-center">
-          <Mascot character={characters[1]} size={90} pose="wave" />
+          <Mascot character={DEFAULT_CHARACTER} size={90} pose="wave" />
         </div>
 
         <h1 className="text-center font-display text-2xl font-extrabold text-ink">

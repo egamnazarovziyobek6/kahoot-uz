@@ -2,8 +2,15 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Mascot from './mascots/Mascot.jsx'
 import NaqshPattern from './decor/NaqshPattern.jsx'
-import { characters } from '../lib/characters.js'
+import { BODY_COLORS, HATS, FACES } from '../lib/avatarParts.js'
 import { fadeUp, inViewOnce } from '../lib/motion.js'
+
+const BANNER_CREW = [
+  { id: 'a', color: BODY_COLORS[0].value, hat: HATS[0].id, face: FACES[0].id },
+  { id: 'b', color: BODY_COLORS[2].value, hat: HATS[1].id, face: FACES[2].id },
+  { id: 'c', color: BODY_COLORS[4].value, hat: HATS[0].id, face: FACES[3].id },
+  { id: 'd', color: BODY_COLORS[6].value, hat: HATS[2].id, face: FACES[1].id },
+]
 
 export default function CtaBanner() {
   return (
@@ -39,7 +46,7 @@ export default function CtaBanner() {
         </div>
 
         <div className="pointer-events-none relative mt-10 flex justify-center gap-2 sm:gap-8">
-          {characters.map((c, i) => (
+          {BANNER_CREW.map((c, i) => (
             <motion.div
               key={c.id}
               animate={{ y: [0, -10, 0] }}

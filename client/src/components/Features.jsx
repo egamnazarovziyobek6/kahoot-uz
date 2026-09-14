@@ -16,8 +16,8 @@ const features = [
   },
   {
     icon: '🎭',
-    title: 'Qahramonlar bilan',
-    text: 'Anora, Bobur, Gulnoza va Sardor o‘yinni kuldiradi va bolalarni jalb qiladi.',
+    title: 'O‘z qahramoningiz',
+    text: 'Rang, bosh kiyim va yuz ifodasini tanlab, har bir o‘yinchi o‘ziga xos qahramon yasaydi.',
     tint: 'bg-saffron/15',
   },
   {

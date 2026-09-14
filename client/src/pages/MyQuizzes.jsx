@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer.jsx'
 import Mascot from '../components/mascots/Mascot.jsx'
 import CameraCapture from '../components/CameraCapture.jsx'
-import { characters } from '../lib/characters.js'
+import { DEFAULT_CHARACTER } from '../lib/avatarParts.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import { listQuizzes, deleteQuiz, duplicateQuiz } from '../lib/quizStore.js'
 import { validateQuiz } from '../lib/quiz.js'
@@ -116,7 +116,7 @@ export default function MyQuizzes() {
           <p className="mt-12 text-center text-ink-soft">Yuklanmoqda…</p>
         ) : quizzes.length === 0 ? (
           <div className="mt-12 flex flex-col items-center rounded-2xl border-2 border-dashed border-white/10 py-16 text-center">
-            <Mascot character={characters[2]} size={140} pose="wave" />
+            <Mascot character={DEFAULT_CHARACTER} size={140} pose="wave" />
             <p className="mt-4 font-display text-xl font-extrabold text-ink">
               Hali test yo‘q
             </p>

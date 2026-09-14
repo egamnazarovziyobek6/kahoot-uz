@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'motion/react'
 import Mascot from './mascots/Mascot.jsx'
 import NaqshPattern from './decor/NaqshPattern.jsx'
-import { characters } from '../lib/characters.js'
+import { DEFAULT_CHARACTER } from '../lib/avatarParts.js'
 import { fadeUp, inViewOnce } from '../lib/motion.js'
 
 const CARD_NUMBER = '9860606749565028'
@@ -43,7 +43,7 @@ export default function Donate() {
             ahamiyatga ega.
           </p>
           <div className="mt-6 flex items-center gap-3">
-            <Mascot character={characters[2]} size={64} pose="cheer" />
+            <Mascot character={DEFAULT_CHARACTER} size={64} pose="cheer" />
             <p className="text-sm font-semibold text-ink-soft">Rahmat, siz ajoyibsiz!</p>
           </div>
         </div>
