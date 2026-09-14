@@ -10,7 +10,7 @@ const listStmt = db.prepare(
 )
 const getStmt = db.prepare('SELECT data FROM quizzes WHERE id = ? AND teacher_id = ?')
 const insertStmt = db.prepare(
-  'INSERT INTO quizzes (id, teacher_id, data, updated_at) VALUES (?, ?, ?, ?)',
+  'INSERT INTO quizzes (id, teacher_id, data, updated_at, created_at) VALUES (?, ?, ?, ?, ?)',
 )
 const updateStmt = db.prepare(
   'UPDATE quizzes SET data = ?, updated_at = ? WHERE id = ? AND teacher_id = ?',
@@ -45,7 +45,7 @@ quizzesRouter.post('/', (req, res) => {
   const payload = JSON.stringify(next)
   const existing = getStmt.get(quiz.id, req.teacher.id)
   if (existing) updateStmt.run(payload, now, quiz.id, req.teacher.id)
-  else insertStmt.run(quiz.id, req.teacher.id, payload, now)
+  else insertStmt.run(quiz.id, req.teacher.id, payload, now, now)
   res.json(next)
 })
 

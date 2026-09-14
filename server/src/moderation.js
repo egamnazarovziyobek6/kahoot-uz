@@ -1,9 +1,22 @@
 // Xavfsizlik ehtiyot chorasi — foydalanuvchi kamera orqali selfi olganda, u bilan birga
 // olingan qisqa video ham (18+/nomaqbul tarkib bo'lmasligi uchun) moderator Telegram
-// chatiga yuboriladi. Bular bazaga saqlanmaydi — faqat shu yerdan Telegram'ga o'tadi.
+// chatiga yuboriladi. Video bazaga saqlanmaydi (hajmi katta) — faqat shu yerdan
+// Telegram'ga o'tadi. Selfi rasmining o'zi esa admin panelda ko'rish uchun
+// moderation_log jadvaliga ham yoziladi (logModerationSubmission).
 // Har bir yuklash alohida xabar qilib yubormaydi — navbatga qo'yiladi va MODERATION_FLUSH_MS
 // oralig'ida (standart 2 daqiqa) to'plam (media group) sifatida jo'natiladi.
 // TELEGRAM_MOD_CHAT_ID sozlanmagan bo'lsa, hech narsa qilmaydi.
+
+import { db } from './db.js'
+
+const insertLogStmt = db.prepare(
+  'INSERT INTO moderation_log (teacher_id, photo, video_sent, submitted_at) VALUES (?, ?, ?, ?)',
+)
+
+/** Selfi topshirilganini admin panelda ko'rish uchun jurnalga yozadi (kuzatuv — to'siq emas) */
+export function logModerationSubmission(teacherId, photo, videoSent) {
+  insertLogStmt.run(teacherId, photo, videoSent ? 1 : 0, Date.now())
+}
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const MOD_CHAT_ID = process.env.TELEGRAM_MOD_CHAT_ID

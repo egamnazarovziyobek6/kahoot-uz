@@ -51,6 +51,55 @@ const deleteQuizStmt = db.prepare('DELETE FROM quizzes WHERE id = ?')
 const countTeachersStmt = db.prepare('SELECT COUNT(*) AS n FROM teachers')
 const countQuizzesStmt = db.prepare('SELECT COUNT(*) AS n FROM quizzes')
 
+const DAY_MS = 24 * 60 * 60 * 1000
+const signupsByDayStmt = db.prepare(
+  "SELECT date(created_at/1000, 'unixepoch') AS day, COUNT(*) AS n FROM teachers GROUP BY day",
+)
+const quizzesByDayStmt = db.prepare(
+  "SELECT date(created_at/1000, 'unixepoch') AS day, COUNT(*) AS n FROM quizzes GROUP BY day",
+)
+const gamesByDayStmt = db.prepare(
+  "SELECT date(ended_at/1000, 'unixepoch') AS day, COUNT(*) AS n FROM game_history GROUP BY day",
+)
+
+/** So'nggi `days` kun uchun kunlik sonlarni 0 bilan to'ldirib qaytaradi */
+function dailyCounts(stmt, days) {
+  const map = new Map(stmt.all().map((r) => [r.day, r.n]))
+  const out = []
+  const today = new Date()
+  for (let i = days - 1; i >= 0; i--) {
+    const key = new Date(today.getTime() - i * DAY_MS).toISOString().slice(0, 10)
+    out.push({ day: key, count: map.get(key) ?? 0 })
+  }
+  return out
+}
+
+const moderationStmt = db.prepare(`
+  SELECT m.id, m.teacher_id, m.photo, m.video_sent, m.submitted_at, m.status, m.reviewed_at, m.reviewed_by,
+    t.name AS teacher_name
+  FROM moderation_log m
+  JOIN teachers t ON t.id = m.teacher_id
+  ORDER BY m.submitted_at DESC
+  LIMIT 50
+`)
+const updateModerationStmt = db.prepare(
+  'UPDATE moderation_log SET status = ?, reviewed_at = ?, reviewed_by = ? WHERE id = ?',
+)
+
+function shapeModeration(m) {
+  return {
+    id: m.id,
+    teacherId: m.teacher_id,
+    teacherName: m.teacher_name,
+    photo: m.photo,
+    videoSent: Boolean(m.video_sent),
+    submittedAt: m.submitted_at,
+    status: m.status,
+    reviewedAt: m.reviewed_at,
+    reviewedBy: m.reviewed_by,
+  }
+}
+
 export const adminRouter = Router()
 adminRouter.use(requireAdmin)
 
@@ -60,6 +109,28 @@ adminRouter.get('/stats', (_req, res) => {
     quizCount: countQuizzesStmt.get().n,
     activeRooms: listRooms().length,
   })
+})
+
+adminRouter.get('/stats-daily', (req, res) => {
+  const days = Math.min(90, Math.max(1, Number(req.query.days) || 30))
+  res.json({
+    signups: dailyCounts(signupsByDayStmt, days),
+    quizzesCreated: dailyCounts(quizzesByDayStmt, days),
+    gamesPlayed: dailyCounts(gamesByDayStmt, days),
+  })
+})
+
+adminRouter.get('/moderation', (_req, res) => {
+  res.json(moderationStmt.all().map(shapeModeration))
+})
+
+adminRouter.put('/moderation/:id', (req, res) => {
+  const status = req.body?.status
+  if (!['approved', 'rejected', 'pending'].includes(status)) {
+    return res.status(400).json({ error: "Noto'g'ri holat" })
+  }
+  updateModerationStmt.run(status, Date.now(), req.teacher?.name ?? null, req.params.id)
+  res.json({ ok: true })
 })
 
 adminRouter.get('/teachers', (_req, res) => {

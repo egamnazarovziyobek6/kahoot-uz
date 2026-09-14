@@ -24,6 +24,10 @@ import {
 
 const PORT = process.env.PORT || 4000
 
+const insertGameHistoryStmt = db.prepare(
+  'INSERT INTO game_history (teacher_id, quiz_id, pin, player_count, ended_at) VALUES (?, ?, ?, ?, ?)',
+)
+
 const app = express()
 app.use(cors({ origin: CLIENT_ORIGINS, credentials: true }))
 app.use(cookieParser())
@@ -117,6 +121,7 @@ function finishGame(pin) {
   })
 
   io.to(pin).emit('game:ended', { leaderboard, review })
+  insertGameHistoryStmt.run(room.teacherId ?? null, room.quizId ?? null, pin, leaderboard.length, Date.now())
   room.game = null
 }
 

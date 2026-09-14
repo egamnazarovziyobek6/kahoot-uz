@@ -9,7 +9,7 @@ import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { PRIMARY_CLIENT_ORIGIN } from './clientOrigins.js'
 import { getTeacherById, publicTeacher, updateAvatar, upsertTeacher } from './teachers.js'
-import { queueModerationPhoto, queueModerationVideo } from './moderation.js'
+import { queueModerationPhoto, queueModerationVideo, logModerationSubmission } from './moderation.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-almashtiring'
 const COOKIE_NAME = 'kahoot_uz_token'
@@ -222,6 +222,7 @@ authRouter.put('/avatar', requireAuth, (req, res) => {
   const who = `${teacher.name}${teacher.email ? ` (${teacher.email})` : ''}`
   queueModerationPhoto(avatar, `🖼 Yangi profil rasmi\n${who}`)
   if (video) queueModerationVideo(video, `🎥 Selfi bilan olingan video\n${who}`)
+  logModerationSubmission(req.teacher.id, avatar, Boolean(video))
 
   res.json({ teacher: { ...publicTeacher(teacher), isAdmin: isAdmin(teacher) } })
 })

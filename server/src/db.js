@@ -52,6 +52,28 @@ db.exec(`
     emoji TEXT NOT NULL,
     PRIMARY KEY (post_id, liker_key)
   );
+
+  CREATE TABLE IF NOT EXISTS game_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    teacher_id TEXT REFERENCES teachers(id) ON DELETE SET NULL,
+    quiz_id TEXT,
+    pin TEXT NOT NULL,
+    player_count INTEGER NOT NULL,
+    ended_at INTEGER NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_game_history_ended ON game_history(ended_at);
+
+  CREATE TABLE IF NOT EXISTS moderation_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    teacher_id TEXT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    photo TEXT,
+    video_sent INTEGER NOT NULL DEFAULT 0,
+    submitted_at INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+    reviewed_at INTEGER,
+    reviewed_by TEXT
+  );
+  CREATE INDEX IF NOT EXISTS idx_moderation_submitted ON moderation_log(submitted_at DESC);
 `)
 
 // Eski bazalarda mavjud bo'lmagan ustunlarni qo'shib qo'yamiz (migratsiya)
@@ -69,6 +91,12 @@ if (!teacherColumns.includes('is_admin')) {
 const forumPostColumns = db.prepare('PRAGMA table_info(forum_posts)').all().map((c) => c.name)
 if (!forumPostColumns.includes('repost_of')) {
   db.exec('ALTER TABLE forum_posts ADD COLUMN repost_of TEXT REFERENCES forum_posts(id)')
+}
+
+const quizColumns = db.prepare('PRAGMA table_info(quizzes)').all().map((c) => c.name)
+if (!quizColumns.includes('created_at')) {
+  db.exec('ALTER TABLE quizzes ADD COLUMN created_at INTEGER')
+  db.exec('UPDATE quizzes SET created_at = updated_at WHERE created_at IS NULL')
 }
 
 db.exec('DROP TABLE IF EXISTS forum_likes')
