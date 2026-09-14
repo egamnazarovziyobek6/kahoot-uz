@@ -6,12 +6,31 @@ const defaultBackend = import.meta.env.PROD ? 'https://kahoot-uz-server.onrender
 export const API_ORIGIN = (import.meta.env.VITE_API_URL || defaultBackend).replace(/\/$/, '')
 const BASE = `${API_ORIGIN}/api`
 
+// Render kabi bepul hostinglarda "uyg'onish" 40-50s gacha cho'zilishi mumkin —
+// shuncha vaqt kutamiz, lekin server haqiqatan ham o'chgan bo'lsa abadiy
+// osilib qolmaslik uchun chegara qo'yamiz.
+const REQUEST_TIMEOUT_MS = 45000
+
 async function request(path, options = {}) {
-  const res = await fetch(BASE + path, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-    ...options,
-  })
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+  let res
+  try {
+    res = await fetch(BASE + path, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+      signal: controller.signal,
+      ...options,
+    })
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      throw new Error("Serverga ulanib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.")
+    }
+    throw e
+  } finally {
+    clearTimeout(timer)
+  }
 
   if (!res.ok) {
     let message = `So'rov xato qaytardi (${res.status})`

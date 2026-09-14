@@ -13,10 +13,19 @@ const AdminTeacherDetail = lazy(() => import('./pages/AdminTeacherDetail.jsx'))
 const Forum = lazy(() => import('./pages/Forum.jsx'))
 
 function RequireAuth({ children }) {
-  const { teacher, loading } = useAuth()
+  const { teacher, loading, waking } = useAuth()
   if (loading) {
     return (
-      <div className="grid h-screen place-items-center bg-cream text-ink-soft">Yuklanmoqda…</div>
+      <div className="grid h-screen place-items-center bg-cream text-ink-soft">
+        <div className="text-center">
+          <p>{waking ? 'Server uyg‘onmoqda, biroz kuting…' : 'Yuklanmoqda…'}</p>
+          {waking && (
+            <p className="mt-1 text-sm text-ink-soft/70">
+              Bepul serverga uzoq tashrif bo‘lmasa, birinchi so‘rov 30-40 soniya olishi mumkin.
+            </p>
+          )}
+        </div>
+      </div>
     )
   }
   if (!teacher) return <Navigate to="/login" replace />
