@@ -7,7 +7,7 @@ const features = [
     icon: IconBolt,
     title: 'Jonli viktorinalar',
     text: 'O‘quvchilar PIN kod bilan qo‘shiladi, savollar real vaqtda ekranda paydo bo‘ladi.',
-    tint: 'bg-anor/10 text-anor',
+    tint: 'bg-gold/10 text-gold',
   },
   {
     icon: IconRobot,
@@ -19,13 +19,13 @@ const features = [
     icon: IconUserCircle,
     title: 'O‘z qahramoningiz',
     text: 'Rang, bosh kiyim va yuz ifodasini tanlab, har bir o‘yinchi o‘ziga xos qahramon yasaydi.',
-    tint: 'bg-saffron/15 text-saffron',
+    tint: 'bg-gold/10 text-gold',
   },
   {
     icon: IconUsers,
     title: 'Sinf va do‘stlar',
     text: 'Bitta xonada 60 tagacha o‘yinchi. Uyga vazifa yoki jamoaviy bahs rejimi.',
-    tint: 'bg-chaman/10 text-chaman',
+    tint: 'bg-gold/10 text-gold',
   },
 ]
 

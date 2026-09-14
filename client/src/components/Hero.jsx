@@ -32,7 +32,7 @@ export default function Hero() {
           >
             Ingliz tili darsini{' '}
             <span
-              className="box-decoration-clone rounded-lg bg-saffron/40 px-2 py-0.5 text-anor"
+              className="box-decoration-clone rounded-lg bg-gold/20 px-2 py-0.5 text-gold-light"
               style={{ WebkitBoxDecorationBreak: 'clone' }}
             >
               o‘yinga

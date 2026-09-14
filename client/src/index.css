@@ -124,19 +124,7 @@
     cursor: pointer;
   }
 
-  .btn-primary {
-    color: #fff;
-    background: linear-gradient(180deg, var(--color-anor) 0%, var(--color-anor-deep) 100%);
-    box-shadow:
-      0 6px 0 0 var(--color-anor-deep),
-      0 0 26px -6px rgb(255 77 94 / 0.55),
-      var(--shadow-card);
-  }
-  .btn-primary:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 0 var(--color-anor-deep), var(--shadow-card);
-  }
-
+  .btn-primary,
   .btn-gold {
     color: #2b1f04;
     background: linear-gradient(180deg, var(--color-gold-light) 0%, var(--color-gold) 100%);
@@ -145,6 +133,7 @@
       0 0 26px -6px rgb(242 198 105 / 0.55),
       var(--shadow-card);
   }
+  .btn-primary:active,
   .btn-gold:active {
     transform: translateY(4px);
     box-shadow: 0 2px 0 0 var(--color-gold-deep), var(--shadow-card);
